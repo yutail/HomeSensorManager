@@ -39,8 +39,6 @@ import com.homesystem.Service.Gateway.Veris.VerisService;
 import com.homesystem.Service.Gateway.Raritan.RaritanDevice;
 import com.homesystem.Service.Gateway.Raritan.RaritanService;
 
-
-
 public class DeviceInfoActivity extends Activity {
 	// debugging
 	private static final String TAG = "DeviceInfoActivity";
@@ -98,14 +96,10 @@ public class DeviceInfoActivity extends Activity {
 	private int veris_value[];
 	
 	// Service 
-	private VeraDevice mVeraService = null;
-	private VeraConnection mVeraConnection;
 	private boolean mIsVeraBind = false;
 	private VerisService mVerisService = null;
-	private VerisConnection mVerisConnection;
 	private boolean mIsVerisBind = false;
 	private RaritanService mRaritanService = null;
-	private RaritanConnection mRaritanConnection;
 	private boolean mIsRaritanBind = false;
 	
 	@Override
@@ -238,7 +232,7 @@ public class DeviceInfoActivity extends Activity {
 		// Veris Device
 		else if (deviceType.equals(Constant.VERIS_NAME)) {
 			veris = (VerisDevice) devByName.get(devName);
-			veris.setHandler(mHandler);
+			//veris.setHandler(mHandler);
 			setVerisLayout();
 			
 			if (mIsVerisBind == false)
@@ -254,7 +248,7 @@ public class DeviceInfoActivity extends Activity {
 						myHomeSystem.addDevicesByName(devName, veris);
 						
 						try {
-							mVerisService.startDataRetrieval(0);
+							//mVerisService.startDataRetrieval();
 						} catch (NullPointerException e) {
 							e.printStackTrace();
 						}
@@ -434,114 +428,65 @@ public class DeviceInfoActivity extends Activity {
 	}
 	
 	
-	
-	// 
-	private class VeraConnection implements ServiceConnection {
-		@Override
-	    public void onServiceConnected(ComponentName className, IBinder service) {
-	        // This is called when the connection with the service has been
-	        // established, giving us the service object we can use to
-	        // interact with the service.  Because we have bound to a explicit
-	        // service that we know is running in our own process, we can
-	        // cast its IBinder to a concrete class and directly access it.
-			//mVeraService = ((VeraService.VeraBinder)service).getService();
-	        Log.d(TAG, "Vera Service Connected");
-	    }
-
-		@Override
-	    public void onServiceDisconnected(ComponentName className) {
-	        // This is called when the connection with the service has been
-	        // unexpectedly disconnected -- that is, its process crashed.
-	        // Because it is running in our same process, we should never
-	        // see this happen.
-	        mVeraService = null;
-	        Log.d(TAG, "Vera Serivce Disconnected");
-	    }	
-	}
-	
 	public void doBindVeraService(int id) {
-		Log.d(TAG, "Bind Vera Service");
-		mVeraConnection = new VeraConnection();
-		Intent veraRetrievalIntent = new Intent();
-		veraRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_NAME, devName);
-		veraRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_ID, id);
-		bindService(veraRetrievalIntent, mVeraConnection, Context.BIND_AUTO_CREATE);	
-		mIsVeraBind = true;
+//		Log.d(TAG, "Bind Vera Service");
+//		mVeraConnection = new VeraConnection();
+//		Intent veraRetrievalIntent = new Intent();
+//		veraRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_NAME, devName);
+//		veraRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_ID, id);
+//		bindService(veraRetrievalIntent, mVeraConnection, Context.BIND_AUTO_CREATE);	
+//		mIsVeraBind = true;
 	}
 	
 	public void doUnbindVeraService() {
-		if (mIsVeraBind) {
-			Log.d(TAG, "Unbind Vera Service");
-			unbindService(mVeraConnection);
-			mIsVeraBind = false;
-		}
+//		if (mIsVeraBind) {
+//			Log.d(TAG, "Unbind Vera Service");
+//			unbindService(mVeraConnection);
+//			mIsVeraBind = false;
+//		}
 	}
 	
-	private class VerisConnection implements ServiceConnection {
-		@Override
-	    public void onServiceConnected(ComponentName className, IBinder service) {
-			//mVerisService = ((VerisService.VerisBinder)service).getService();
-	        Log.d(TAG, "Veris Service Connected");
-	    }
 
-		@Override
-	    public void onServiceDisconnected(ComponentName className) {
-	        mVerisService = null;
-	        Log.d(TAG, "Veris Serivce Disconnected");
-	    }	
-	}
 	
 	public void doBindVerisService() {
-		Log.d(TAG, "Bind Veris Service");
-		mVerisConnection = new VerisConnection();
-		Intent verisRetrievalIntent = new Intent(getApplicationContext(), VerisService.class);
-		verisRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_NAME, devName);
-		bindService(verisRetrievalIntent, mVerisConnection, Context.BIND_AUTO_CREATE);	
-		mIsVerisBind = true;	
+//		Log.d(TAG, "Bind Veris Service");
+//		mVerisConnection = new VerisConnection();
+//		Intent verisRetrievalIntent = new Intent(getApplicationContext(), VerisService.class);
+//		verisRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_NAME, devName);
+//		bindService(verisRetrievalIntent, mVerisConnection, Context.BIND_AUTO_CREATE);	
+//		mIsVerisBind = true;	
 	}
 	
 	public void doUnbindVerisService() {
-		if (mIsVerisBind) {
-			Log.d(TAG, "Unbind Veris Service");
-			unbindService(mVerisConnection);
-			mIsVerisBind = false;
-		}
+//		if (mIsVerisBind) {
+//			Log.d(TAG, "Unbind Veris Service");
+//			unbindService(mVerisConnection);
+//			mIsVerisBind = false;
+//		}
 	}
 	
-	private class RaritanConnection implements ServiceConnection {
-		@Override
-	    public void onServiceConnected(ComponentName className, IBinder service) {
-			mRaritanService = ((RaritanService.RaritanBinder)service).getService();
-	        Log.d(TAG, "Raritan Service Connected");
-	    }
-
-		@Override
-	    public void onServiceDisconnected(ComponentName className) {
-	        mRaritanService = null;
-	        Log.d(TAG, "Raritan Serivce Disconnected");
-	    }	
-	}
+	
 	
 	public void doBindRaritanService(int id) {
-		Log.d(TAG, "Bind Raritan Service");
-		if (mIsRaritanBind == false) {
-			mRaritanConnection = new RaritanConnection();
-			Intent raritanRetrievalIntent = new Intent(getApplicationContext(), RaritanService.class);
-			raritanRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_NAME, devName);
-			raritanRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_ID, id);
-			bindService(raritanRetrievalIntent, mRaritanConnection, Context.BIND_AUTO_CREATE);	
-			mIsRaritanBind = true;
-		} else {
-			mRaritanService.startDataRetrieval(id);
-		}
+//		Log.d(TAG, "Bind Raritan Service");
+//		if (mIsRaritanBind == false) {
+//			mRaritanConnection = new RaritanConnection();
+//			Intent raritanRetrievalIntent = new Intent(getApplicationContext(), RaritanService.class);
+//			raritanRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_NAME, devName);
+//			raritanRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_ID, id);
+//			bindService(raritanRetrievalIntent, mRaritanConnection, Context.BIND_AUTO_CREATE);	
+//			mIsRaritanBind = true;
+//		} else {
+//			mRaritanService.startDataRetrieval(id);
+//		}
 	}
 	
 	public void doUnbindRaritanService() {
-		if (mIsRaritanBind) {
-			Log.d(TAG, "Unbind Raritan Service");
-			unbindService(mRaritanConnection);
-			mIsRaritanBind = false;
-		}
+//		if (mIsRaritanBind) {
+//			Log.d(TAG, "Unbind Raritan Service");
+//			unbindService(mRaritanConnection);
+//			mIsRaritanBind = false;
+//		}
 	}
 	
 	
@@ -583,7 +528,6 @@ public class DeviceInfoActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}

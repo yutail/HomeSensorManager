@@ -7,6 +7,7 @@ import com.homesystem.Service.Constant;
 import com.homesystem.Service.HomeSystem;
 import com.homesystem.Service.ISensorReportService;
 import com.homesystem.Service.Gateway.SensorDevice;
+import com.homesystem.Service.Gateway.Vera.VeraDevice;
 import com.homesystem.Service.Gateway.Veris.VerisDevice;
 
 
@@ -92,7 +93,9 @@ public class DeviceListActivity extends Activity {
     		} catch (RemoteException e) {
     			e.printStackTrace();
     		}
+        	/* Need to be Modified */
         	HomeSystem.setInstance(myHomeSystem);
+        	
     		sensorByName = myHomeSystem.getHomeSensors();
     		ArrayList<String> sensorList = new ArrayList<String>();
     		for (String sensor: sensorByName.keySet())
@@ -131,6 +134,11 @@ public class DeviceListActivity extends Activity {
 				Log.d(TAG, "Veris Device");
 				deviceInfoIntent.putExtra(Constant.EXTRA_DEVICE_TYPE, Constant.VERIS_NAME);
 				deviceInfoIntent.putExtra(Constant.EXTRA_DEVICE_NAME, sensorName);
+			} else if (device instanceof VeraDevice) {
+				Log.d(TAG, "Vera Device");
+				deviceInfoIntent.putExtra(Constant.EXTRA_DEVICE_TYPE, Constant.VERA_NAME);
+				deviceInfoIntent.putExtra(Constant.EXTRA_DEVICE_NAME, sensorName);
+				
 			}
 			
 			startActivity(deviceInfoIntent);

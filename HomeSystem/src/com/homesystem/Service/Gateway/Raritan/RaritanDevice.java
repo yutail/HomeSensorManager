@@ -258,16 +258,16 @@ public class RaritanDevice extends SensorDevice implements DataRetrieval, Parcel
 	
 	
 	@Override
-	public void subscribeToSensor(int id) {
-		setInterruptFlag(false, id);
-		threadPool.execute(new RaritanSNMPManager(ip_address,
-				port, id, password, channel));	
+	public void subscribeToSensor(int... id) {
+//		setInterruptFlag(false, id);
+//		threadPool.execute(new RaritanSNMPManager(ip_address,
+//				port, id, password, channel));	
 		
 	}
 
 	@Override
-	public void unsubscribeFromSensor(int id) {
-		setInterruptFlag(true, id);
+	public void unsubscribeFromSensor(int... id) {
+//		setInterruptFlag(true, id);
 		
 	}
 

@@ -227,7 +227,7 @@ public class DeviceInfoActivity extends Activity {
 		// Veris Device
 		else if (deviceType.equals(Constant.VERIS_NAME)) {
 			veris = (VerisDevice) devByName.get(devName);
-			veris.setHandler(mHandler);
+			//veris.setHandler(mHandler);
 			setVerisLayout();
 
 			if (mIsVerisBind == false)
@@ -243,7 +243,7 @@ public class DeviceInfoActivity extends Activity {
 						myHomeSystem.addDevicesByName(devName, veris);
 
 						try {
-							mVerisService.startDataRetrieval(0);
+							mVerisService.startDataRetrieval();
 						} catch (RemoteException e) {
 							e.printStackTrace();
 						}

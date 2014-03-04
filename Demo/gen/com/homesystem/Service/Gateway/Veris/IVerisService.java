@@ -45,9 +45,7 @@ return true;
 case TRANSACTION_startDataRetrieval:
 {
 data.enforceInterface(DESCRIPTOR);
-int _arg0;
-_arg0 = data.readInt();
-this.startDataRetrieval(_arg0);
+this.startDataRetrieval();
 reply.writeNoException();
 return true;
 }
@@ -69,13 +67,12 @@ public java.lang.String getInterfaceDescriptor()
 {
 return DESCRIPTOR;
 }
-@Override public void startDataRetrieval(int id) throws android.os.RemoteException
+@Override public void startDataRetrieval() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
 try {
 _data.writeInterfaceToken(DESCRIPTOR);
-_data.writeInt(id);
 mRemote.transact(Stub.TRANSACTION_startDataRetrieval, _data, _reply, 0);
 _reply.readException();
 }
@@ -87,5 +84,5 @@ _data.recycle();
 }
 static final int TRANSACTION_startDataRetrieval = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
 }
-public void startDataRetrieval(int id) throws android.os.RemoteException;
+public void startDataRetrieval() throws android.os.RemoteException;
 }
