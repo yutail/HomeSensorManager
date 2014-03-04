@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Home System</string>
+    <string name="action_settings">Settings</string>
+    
+    <string-array name="sensor_type">
+        <item>Vera Device</item>
+        <item>Veris E30</item>
+        <item>Raritan Dominion</item>
+    </string-array>
+
+</resources>

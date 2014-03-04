@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+         <TextView
+             android:id="@+id/sensor_type"
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"
+             android:gravity="center"
+             android:text="Sensor Type" 
+             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+         <Spinner
+             android:id="@+id/choose_sensor"
+             android:layout_width="wrap_content"
+             android:layout_height="48dp" />
+         
+     </LinearLayout>
+     
+     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+         <TextView
+             android:id="@+id/sensor_name"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Name: "
+             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+         <EditText
+             android:id="@+id/edit_name"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10" >
+
+             <requestFocus />
+         </EditText>
+         
+     </LinearLayout>
+     
+     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+         <TextView
+             android:id="@+id/location"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Location: "
+             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+         <EditText
+             android:id="@+id/edit_location"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10" />
+     
+     </LinearLayout>
+     
+     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+         <TextView
+             android:id="@+id/ip_address"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="IP Address: "
+             android:textAppearance="?android:attr/textAppearanceMedium" />
+         
+         <EditText
+             android:id="@+id/edit_ip"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10" />
+         
+     </LinearLayout>
+     
+      <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+         <TextView
+             android:id="@+id/port"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Port: "
+             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+         <EditText
+             android:id="@+id/edit_port"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10" />
+         
+     </LinearLayout>
+     
+     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+         <TextView
+             android:id="@+id/interval"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Interval: "
+             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+         <EditText
+             android:id="@+id/edit_interval"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10" />
+         
+     </LinearLayout>
+     
+     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+         <TextView
+             android:id="@+id/reg_addr"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Register Addr: "
+             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+         <EditText
+             android:id="@+id/edit_reg_addr"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10" />
+         
+     </LinearLayout>
+     
+     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+         <TextView
+             android:id="@+id/reg_qty"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Register Quantity: "
+             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+         <EditText
+             android:id="@+id/edit_reg_qty"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10" />
+         
+     </LinearLayout>
+     
+     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+         <TextView
+             android:id="@+id/usr"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Username: "
+             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+         <EditText
+             android:id="@+id/edit_usr"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10" />
+         
+     </LinearLayout>
+     
+     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+         <TextView
+             android:id="@+id/password"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Password: "
+             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+         <EditText
+             android:id="@+id/edit_password"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10" />
+         
+     </LinearLayout>
+     
+     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+         <Button
+             android:id="@+id/save_info"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="Save Info" />
+         
+     </LinearLayout>
+
+
+</LinearLayout>
