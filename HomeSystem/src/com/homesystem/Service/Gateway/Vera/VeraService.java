@@ -95,7 +95,6 @@ public class VeraService extends Service implements DataRetrieval {
 		@Override
 		public void startDataRetrieval(int id) throws RemoteException {
 			subscribeToSensor(id);
-			id = idLight;
 		}
 	};
 	
@@ -127,7 +126,7 @@ public class VeraService extends Service implements DataRetrieval {
 	@Override
 	public void subscribeToSensor(int... id) {
 		Log.d(TAG, "Subscribe to Vera Sensor");
-		String targetURL = generateURL(request[2], format);
+		String targetURL = generateURL(request[2], format, vera);
 //		try {
 //			setInterruptFlag(false, id);
 //			threadPool.execute(new HttpClient(id, targetURL));
@@ -146,13 +145,13 @@ public class VeraService extends Service implements DataRetrieval {
 		//setInterruptFlag(true, id);	
 	}
 	
-	public String generateURL(String r, String f) {
+	public String generateURL(String r, String f, VeraDevice vera) {
 		// Format of Requested URL: http://ip_address:3480/data_request?id=sdata&output_format=json
 		StringBuilder result = new StringBuilder();
 		result.append("http://");
-		result.append(ip_address);
+		result.append(vera.getIp());
 		result.append(":");
-		result.append(port);
+		result.append(vera.getPort());
 		result.append("/data_request?");
 		result.append("id=");
 		result.append(r);
@@ -181,7 +180,6 @@ public class VeraService extends Service implements DataRetrieval {
 	}
 	
 	private class HttpClient implements Runnable {
-		
 		private URL vera_url = null;
 		private HttpURLConnection vera_connection = null;
 		private int tid;

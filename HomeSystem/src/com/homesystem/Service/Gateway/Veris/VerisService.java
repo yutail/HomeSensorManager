@@ -68,8 +68,7 @@ public class VerisService extends Service implements DataRetrieval {
 	private final IVerisService.Stub mBinder = new IVerisService.Stub() {
 		@Override
 		public void startDataRetrieval() throws RemoteException {
-			subscribeToSensor();
-			
+			subscribeToSensor();	
 		}
 	};
 	

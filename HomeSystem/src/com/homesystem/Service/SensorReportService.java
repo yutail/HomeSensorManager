@@ -8,6 +8,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +37,9 @@ public class SensorReportService extends Service {
 	
 	private HomeSystem myHomeSystem;
 	private HashMap<String, SensorDevice> sensorByName;
+	
+	// Handling Threads
+	private ExecutorService threadPool = Executors.newCachedThreadPool();	
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -49,12 +54,13 @@ public class SensorReportService extends Service {
 			VeraDevice vera = new VeraDevice.VeraBuilder("nesl", "vera1", "Vera", "172.17.5.117").
 					setInterval(10).setPort(3480).build();
 			
+			getVeraDeviceInfo(vera);			
+			
 			myHomeSystem.addDevicesByName("vera1", vera);
 			
 			VerisDevice veris = new VerisDevice.VerisBuilder("nesl", "veris1", "Veris E30", 
 					"128.97.93.90", 2251).setInterval(10).setPort(4660).
 					setRegQty(40).build();
-			
 			
 			myHomeSystem.addDevicesByName("veris1", veris);
 			return myHomeSystem;		
@@ -76,14 +82,14 @@ public class SensorReportService extends Service {
 	
 	}
 	
-public void getVeraDeviceInfo() {		
+	public void getVeraDeviceInfo(VeraDevice vera) {		
 		
 		threadPool.submit(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					// HTTP connection
-					URL targetURL = new URL(generateURL(request[2], format));
+					URL targetURL = new URL("http://ip_address:3480/data_request?id=sdata&output_format=json");
 					HttpURLConnection http_connection = (HttpURLConnection) targetURL.openConnection();
 					http_connection.setRequestMethod("GET");
 					http_connection.setDoOutput(false);
@@ -114,7 +120,7 @@ public void getVeraDeviceInfo() {
 
 							MotherSensor mController = new MotherSensor(category, subcategory, 
 									deviceNum, "3-in-1 Sensor");
-							VeraDevice.this.setMotherSensor(deviceNum, mController);	
+							//vera.setMotherSensor(deviceNum, mController);	
 							VeraSensorQueue.mSensorQueue.add(mController);
 							
 						} else if (dev.has("light")) {
@@ -122,7 +128,7 @@ public void getVeraDeviceInfo() {
 							LightLevelSensor mLight = new LightLevelSensor(category, subcategory, 
 									deviceNum, "Temperature Sensor", parent);
 							mLight.setLightLevel(Float.parseFloat(dev.getString("light")));
-							VeraDevice.this.setLightSensor(deviceNum, mLight);
+							//vera.setLightSensor(deviceNum, mLight);
 							VeraSensorQueue.mSensorQueue.add(mLight);
 
 						} else if (dev.has("temperature")) {
@@ -130,14 +136,14 @@ public void getVeraDeviceInfo() {
 							TemperatureSensor mTemperature = new TemperatureSensor(category, subcategory, 
 									deviceNum, "Temperature Sensor", parent);
 							mTemperature.setTemperature(Float.parseFloat(dev.getString("temperature")));
-							VeraDevice.this.setTemperatureSensor(deviceNum, mTemperature);
+							//vera.setTemperatureSensor(deviceNum, mTemperature);
 							VeraSensorQueue.mSensorQueue.add(mTemperature);
 
 						} else {
 							
 							MotionSensor mMotion = new MotionSensor(category, subcategory, 
 									deviceNum, "Motion Sensor", parent);
-							VeraDevice.this.setMotionSensor(deviceNum, mMotion);	
+							//vera.setMotionSensor(deviceNum, mMotion);	
 							VeraSensorQueue.mSensorQueue.add(mMotion);
 						}
 					}
@@ -155,6 +161,24 @@ public void getVeraDeviceInfo() {
 				}
 			}
 		});
+		
+		try {
+			int size = VeraSensorQueue.mSensorSize.take();
+			for (int i=0; i<size; i++) {
+				MotherSensor mSensor = VeraSensorQueue.mSensorQueue.take();
+				if (mSensor instanceof TemperatureSensor)
+					vera.setTemperatureSensor(mSensor.getDeviceNum(), (TemperatureSensor) mSensor);
+				else if (mSensor instanceof LightLevelSensor)
+					vera.setLightSensor(mSensor.getDeviceNum(), (LightLevelSensor) mSensor);
+				else if (mSensor instanceof MotionSensor)
+					vera.setMotionSensor(mSensor.getDeviceNum(), (MotionSensor) mSensor);	
+				else
+					vera.setMotherSensor(mSensor.getDeviceNum(), mSensor);
+			}
+			
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
