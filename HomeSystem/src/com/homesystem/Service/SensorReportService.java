@@ -25,6 +25,7 @@ public class SensorReportService extends Service {
 		return mBinder;
 	}
 	
+	
 	private final ISensorReportService.Stub mBinder = new ISensorReportService.Stub() {
 		@Override
 		public HomeSystem reportHomeSensor() throws RemoteException {
