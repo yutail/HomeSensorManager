@@ -102,7 +102,6 @@ public class RaritanService extends Service implements DataRetrieval {
 
 	@Override
 	public void subscribeToSensor(int... id) {
-		
 		setInterruptFlag(false, id[0]);
 		threadPool.execute(new RaritanSNMPManager(raritan.getIp(),
 				raritan.getPort(), id[0], 
