@@ -121,6 +121,9 @@ public class DeviceInfoActivity extends Activity {
 			vera = (VeraDevice) devByName.get(devName);
 			setVeraLayout();
 			Log.d(TAG, "Vera Sensor Type: " + vera.getSensorType());
+			
+			if (mIsVeraBind == false)
+				doBindVeraService();
 
 			HashMap<Integer, TemperatureSensor> mTemperatureMap = vera.getTemperatureSensor();
 			HashMap<Integer, LightLevelSensor> mLightMap = vera.getLightSensor();
@@ -128,10 +131,8 @@ public class DeviceInfoActivity extends Activity {
 
 			Iterator<Integer> mTemIt = mTemperatureMap.keySet().iterator();
 			Log.d(TAG, "Temperature Map key: " + mTemperatureMap.keySet());
-
 			Iterator<Integer> mLightIt = mLightMap.keySet().iterator();
 			Log.d(TAG, "Light Map key: " + mLightMap.keySet());
-
 			Iterator<Integer> mMotionIt = mMotionMap.keySet().iterator();
 			Log.d(TAG, "Light Map key: " + mMotionMap.keySet());
 
@@ -156,8 +157,6 @@ public class DeviceInfoActivity extends Activity {
 				Log.d(TAG, "Motion id: " + idMotion);
 			}			
 
-			myHomeSystem.addDevicesByName(devName, vera);
-
 			veraSensorCheckBox1.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView,
@@ -165,6 +164,12 @@ public class DeviceInfoActivity extends Activity {
 
 					if (isChecked) {
 						Log.d(TAG, "Temp Service Started: " + idTem);
+						try {
+							mVeraService.startDataRetrieval(idTem);
+						} catch (RemoteException e) {
+							
+							e.printStackTrace();
+						}
 
 					} else {
 						
@@ -181,6 +186,11 @@ public class DeviceInfoActivity extends Activity {
 
 					if (isChecked) {
 						Log.d(TAG, "Light Service Started: " + idLight);
+						try {
+							mVeraService.startDataRetrieval(idLight);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
 						
 					} else {
 						
@@ -206,9 +216,9 @@ public class DeviceInfoActivity extends Activity {
 		// Veris Device
 		else if (deviceType.equals(Constant.VERIS_NAME)) {
 			veris = (VerisDevice) devByName.get(devName);
-			//veris.setHandler(mHandler);
 			setVerisLayout();
-
+			
+			// Bind to Veris Service
 			if (mIsVerisBind == false)
 				doBindVerisService();
 
@@ -219,7 +229,7 @@ public class DeviceInfoActivity extends Activity {
 					if (isChecked) {
 						int len = veris.getRegQty();
 						veris_value = new int[len];
-						myHomeSystem.addDevicesByName(devName, veris);
+						
 
 						try {
 							mVerisService.startDataRetrieval();
@@ -241,19 +251,19 @@ public class DeviceInfoActivity extends Activity {
 		else if (deviceType.equals(Constant.RARITAN_NAME)) {
 			raritan = (RaritanDevice) devByName.get(devName);
 			setRaritanLayout();
+			
+			// Bind to Raritan Service
+			if (mIsRaritanBind == false)
+				doBindRaritanService();
 
 			raritanVoltageCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView,
 						boolean isChecked) {
 					if (isChecked) {
-						if(mIsRaritanBind)
-							doUnbindRaritanService();
-
 						raritan.setChannel(Constant.RARITAN_VOLTAGE);
 						int id = Integer.parseInt(raritanVoltageEdit.getText().toString());
-						myHomeSystem.addDevicesByName(devName, raritan);
-						doBindRaritanService(id);
+						
 						
 					} else {
 						doUnbindRaritanService();
@@ -270,13 +280,10 @@ public class DeviceInfoActivity extends Activity {
 				public void onCheckedChanged(CompoundButton buttonView,
 						boolean isChecked) {
 					if (isChecked) {
-						if(mIsRaritanBind)
-							doUnbindRaritanService();
 
 						raritan.setChannel(Constant.RARITAN_ACTIVE_POWER);
 						int id = Integer.parseInt(raritanActivePowerEdit.getText().toString());
-						myHomeSystem.addDevicesByName(devName, raritan);
-						doBindRaritanService(id);
+						
 
 					} else {
 						doUnbindRaritanService();
@@ -295,8 +302,8 @@ public class DeviceInfoActivity extends Activity {
 
 						raritan.setChannel(Constant.RARITAN_CURRENT);
 						int id = Integer.parseInt(raritanCurrentEdit.getText().toString());
-						myHomeSystem.addDevicesByName(devName, raritan);
-						doBindRaritanService(id);
+						
+				
 
 					} else {
 						doUnbindRaritanService();
@@ -415,12 +422,11 @@ public class DeviceInfoActivity extends Activity {
 		}	
 	}
 
-	public void doBindVeraService(int id) {
+	public void doBindVeraService() {
 		Log.d(TAG, "Bind Vera Service");
 		mVeraConnection = new VeraConnection();
 		Intent veraRetrievalIntent = new Intent("com.homesystem.Service.Gateway.Vera.IVeraService");
 		veraRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_NAME, devName);
-		veraRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_ID, id);
 		bindService(veraRetrievalIntent, mVeraConnection, Context.BIND_AUTO_CREATE);	
 		mIsVeraBind = true;
 	}
@@ -480,12 +486,11 @@ public class DeviceInfoActivity extends Activity {
 		}	
 	}
 
-	public void doBindRaritanService(int id) {
+	public void doBindRaritanService() {
 		Log.d(TAG, "Bind Raritan Service");
 		mRaritanConnection = new RaritanConnection();
 		Intent raritanRetrievalIntent = new Intent("com.homesystem.Service.Gateway.Raritan.IRaritanService");
 		raritanRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_NAME, devName);
-		raritanRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_ID, id);
 		bindService(raritanRetrievalIntent, mRaritanConnection, Context.BIND_AUTO_CREATE);	
 		mIsRaritanBind = true;
 	}

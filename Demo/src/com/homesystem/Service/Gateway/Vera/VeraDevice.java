@@ -24,7 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.homesystem.Service.Constant;
-import com.homesystem.Service.DataRetrieval;
 import com.homesystem.Service.Gateway.Vera.VeraSensor.LightLevelSensor;
 import com.homesystem.Service.Gateway.Vera.VeraSensor.MotherSensor;
 import com.homesystem.Service.Gateway.Vera.VeraSensor.MotionSensor;

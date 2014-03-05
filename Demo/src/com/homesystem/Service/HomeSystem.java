@@ -18,8 +18,6 @@ public class HomeSystem implements Parcelable {
 			new HashMap<String, ArrayList<SensorDevice>>();
 	private static HomeSystem personalizedHome = null;
 	
-	private String debug = "debug";
-	
 	private HomeSystem() {
 		
 	}
@@ -70,7 +68,7 @@ public class HomeSystem implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeMap(sensorByName);	
-		//dest.writeParcelable(personalizedHome, flags);
+		
 	}
 	
 	public static final Parcelable.Creator<HomeSystem> CREATOR
@@ -86,7 +84,7 @@ public class HomeSystem implements Parcelable {
 
 	private HomeSystem(Parcel in) {
 		in.readMap(sensorByName, SensorDevice.class.getClassLoader());
-		//personalizedHome = in.readParcelable(HomeSystem.class.getClassLoader());
+		
 	}
 
 }
