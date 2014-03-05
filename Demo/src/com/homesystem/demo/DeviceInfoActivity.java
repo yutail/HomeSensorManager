@@ -105,6 +105,15 @@ public class DeviceInfoActivity extends Activity {
 	private IRaritanService mRaritanService = null;
 	private RaritanConnection mRaritanConnection;
 	private boolean mIsRaritanBind = false;
+	
+	// Handling Messages
+	private static final int VERA_MESSAGE = 1;
+	private static final int VERIS_MESSAGE = 2;
+	private static final int RARITAN_MESSAGE = 3;
+	private static final String VERA_VALUE = "vera_value";
+	private static final String VERIS_VALUE = "veris_value";
+	private static final String RARITAN_VALUE = "raritan_value";
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -492,16 +501,16 @@ public class DeviceInfoActivity extends Activity {
 		}
 	}
 	
+	// VerisService Callback
 	private IVerisServiceCallback mVerisCallback = new IVerisServiceCallback.Stub() {
 
 		@Override
 		public void updateVerisValue(int[] value) throws RemoteException {
-	        Message msg = mHandler.obtainMessage(Constant.VERIS_MESSAGE);
+	        Message msg = mHandler.obtainMessage(VERIS_MESSAGE);
 	        Bundle bundle = new Bundle();
-	        bundle.putIntArray(Constant.VERIS_VALUE, value);			       
+	        bundle.putIntArray(VERIS_VALUE, value);			       
 	        msg.setData(bundle);
-	        mHandler.sendMessage(msg);	
-			
+	        mHandler.sendMessage(msg);		
 		}
 	};
 
@@ -542,8 +551,8 @@ public class DeviceInfoActivity extends Activity {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
-			case Constant.VERA_MESSAGE:
-				String vera_value = msg.getData().getString(Constant.VERA_VALUE);
+			case VERA_MESSAGE:
+				String vera_value = msg.getData().getString(VERA_VALUE);
 				String vera_type = msg.getData().getString(Constant.VERA_SUBTYPE);
 				if (vera_type.equals("temperature"))
 					veraSensorValue1.setText(vera_value);
@@ -553,13 +562,13 @@ public class DeviceInfoActivity extends Activity {
 					veraSensorValue3.setText(vera_value);
 				break;
 
-			case Constant.VERIS_MESSAGE:
-				veris_value = msg.getData().getIntArray(Constant.VERIS_VALUE);				
+			case VERIS_MESSAGE:
+				veris_value = msg.getData().getIntArray(VERIS_VALUE);				
 				verisDataEditText.setText(Arrays.toString(veris_value));
 				break;
 
-			case Constant.RARITAN_MESSAGE:
-				String raritan_value = msg.getData().getString(Constant.RARITAN_VALUE);
+			case RARITAN_MESSAGE:
+				String raritan_value = msg.getData().getString(RARITAN_VALUE);
 				String channel = msg.getData().getString(Constant.RARITAN_CHANNEL);
 				Log.d(TAG, "Received Channel Value: " + channel);
 				if (channel.equals(Constant.RARITAN_VOLTAGE))

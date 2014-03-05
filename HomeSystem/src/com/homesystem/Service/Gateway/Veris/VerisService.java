@@ -43,9 +43,9 @@ public class VerisService extends Service implements DataRetrieval {
 	private RemoteCallbackList<IVerisServiceCallback> mVerisCallbackList =
 			new RemoteCallbackList<IVerisServiceCallback>();
 	
-	// Sampling interval 
+	// Sampling Interval 
 	private int interval = 10;
-	
+	// Handling Message
 	private static final int REPORT_MSG = 1;
 	private static final String VERIS_VALUE = "veris_value";
 	
@@ -102,18 +102,29 @@ public class VerisService extends Service implements DataRetrieval {
 	// Handler
 	private final Handler mHandler = new Handler() {
 		@Override public void handleMessage(Message msg) {
-			
 			switch(msg.what) {
+			case REPORT_MSG: {
+				int[] veris_value = new int[veris.getRegQty()];
+				veris_value = msg.getData().getIntArray(VERIS_VALUE);
+				
+				// Broadcast to client the new value.
+                final int num = mVerisCallbackList.beginBroadcast();
+                Log.d(TAG, "Number of Clients: " + num);
+                try {
+                	mVerisCallbackList.getBroadcastItem(num-1).updateVerisValue(veris_value);
+                } catch (RemoteException e) {
+                	e.printStackTrace();
+                }
 			
+                mVerisCallbackList.finishBroadcast();
+			} break;
 			
+			default:
+				super.handleMessage(msg);		
 			
 			}
-			
-			
-		}
-		
+		}		
 	};
-	
 	
 	@Override 
     public void onCreate() { 
