@@ -10,6 +10,8 @@ interface IRaritanService {
 	
 	void setInterval(in int i);
 	
+	void setChannel(in String channel);
+	
 	void registerRaritanCallback(IRaritanServiceCallback raritan_cb);
 	
 	void unregisterRaritanCallback(IRaritanServiceCallback raritan_cb);

@@ -69,6 +69,15 @@ this.setInterval(_arg0);
 reply.writeNoException();
 return true;
 }
+case TRANSACTION_setChannel:
+{
+data.enforceInterface(DESCRIPTOR);
+java.lang.String _arg0;
+_arg0 = data.readString();
+this.setChannel(_arg0);
+reply.writeNoException();
+return true;
+}
 case TRANSACTION_registerRaritanCallback:
 {
 data.enforceInterface(DESCRIPTOR);
@@ -150,6 +159,21 @@ _reply.recycle();
 _data.recycle();
 }
 }
+@Override public void setChannel(java.lang.String channel) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeString(channel);
+mRemote.transact(Stub.TRANSACTION_setChannel, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
 @Override public void registerRaritanCallback(com.homesystem.Service.Gateway.Raritan.IRaritanServiceCallback raritan_cb) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
@@ -184,12 +208,14 @@ _data.recycle();
 static final int TRANSACTION_startDataRetrieval = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
 static final int TRANSACTION_stopDataRetrieval = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
 static final int TRANSACTION_setInterval = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
-static final int TRANSACTION_registerRaritanCallback = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
-static final int TRANSACTION_unregisterRaritanCallback = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
+static final int TRANSACTION_setChannel = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
+static final int TRANSACTION_registerRaritanCallback = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
+static final int TRANSACTION_unregisterRaritanCallback = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
 }
 public void startDataRetrieval(int id) throws android.os.RemoteException;
 public void stopDataRetrieval(int id) throws android.os.RemoteException;
 public void setInterval(int i) throws android.os.RemoteException;
+public void setChannel(java.lang.String channel) throws android.os.RemoteException;
 public void registerRaritanCallback(com.homesystem.Service.Gateway.Raritan.IRaritanServiceCallback raritan_cb) throws android.os.RemoteException;
 public void unregisterRaritanCallback(com.homesystem.Service.Gateway.Raritan.IRaritanServiceCallback raritan_cb) throws android.os.RemoteException;
 }

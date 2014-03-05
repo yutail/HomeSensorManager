@@ -80,10 +80,12 @@ public class VerisService extends Service implements DataRetrieval {
 			subscribeToSensor();	
 		}
 		
+		@Override
 		public void stopDataRetrieval() throws RemoteException {
 			unsubscribeFromSensor();
 		}
 		
+		@Override
 		public void setInterval(int i) throws RemoteException {
 			interval = i;
 		}

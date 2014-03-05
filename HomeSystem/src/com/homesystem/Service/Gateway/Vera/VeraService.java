@@ -104,10 +104,12 @@ public class VeraService extends Service implements DataRetrieval {
 			subscribeToSensor(id);
 		}
 		
+		@Override
 		public void stopDataRetrieval(int id) throws RemoteException {
 			unsubscribeFromSensor(id);
 		}
 		
+		@Override
 		public void setInterval(int i) throws RemoteException {
 			interval = i;
 		}

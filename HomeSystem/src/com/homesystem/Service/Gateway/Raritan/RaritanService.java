@@ -89,12 +89,19 @@ public class RaritanService extends Service implements DataRetrieval {
 			subscribeToSensor(id);	
 		}
 		
+		@Override
 		public void stopDataRetrieval(int id) throws RemoteException {
 			unsubscribeFromSensor(id);
 		}
 		
+		@Override
 		public void setInterval(int i) throws RemoteException {
 			interval = i;
+		}
+		
+		@Override
+		public void setChannel(String channel) throws RemoteException {
+			raritan.setChannel(channel);
 		}
 
 		@Override
@@ -150,8 +157,7 @@ public class RaritanService extends Service implements DataRetrieval {
 	@Override 
 	public void onDestroy() {  
         super.onDestroy(); 
-        Log.d(TAG, "RaritanService onDestroy");
-        unsubscribeFromSensor(outletNum);   
+        Log.d(TAG, "RaritanService onDestroy"); 
 	}
 
 	@Override

@@ -303,15 +303,14 @@ public class DeviceInfoActivity extends Activity {
 						boolean isChecked) {
 					int id = Integer.parseInt(raritanVoltageEdit.getText().toString());
 					if (isChecked) {
-						raritan.setChannel(Constant.RARITAN_VOLTAGE);
 						try {
+							mRaritanService.setChannel(Constant.RARITAN_VOLTAGE);
 							mRaritanService.startDataRetrieval(id);
 						} catch (RemoteException e) {
 							e.printStackTrace();
 						}						
 						
 					} else {
-						
 						try {
 							mRaritanService.stopDataRetrieval(id);
 						} catch (RemoteException e) {
@@ -329,9 +328,8 @@ public class DeviceInfoActivity extends Activity {
 						boolean isChecked) {
 					int id = Integer.parseInt(raritanActivePowerEdit.getText().toString());
 					if (isChecked) {
-						raritan.setChannel(Constant.RARITAN_ACTIVE_POWER);
-						
 						try {
+							mRaritanService.setChannel(Constant.RARITAN_ACTIVE_POWER);
 							mRaritanService.startDataRetrieval(id);
 						} catch (RemoteException e) {
 							e.printStackTrace();
@@ -355,9 +353,8 @@ public class DeviceInfoActivity extends Activity {
 						boolean isChecked) {
 					int id = Integer.parseInt(raritanCurrentEdit.getText().toString());
 					if (isChecked) {
-
-						raritan.setChannel(Constant.RARITAN_CURRENT);
 						try {
+							mRaritanService.setChannel(Constant.RARITAN_CURRENT);
 							mRaritanService.startDataRetrieval(id);
 						} catch (RemoteException e) {
 							e.printStackTrace();
