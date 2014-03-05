@@ -45,6 +45,10 @@ public class VeraService extends Service implements DataRetrieval {
 	private HomeSystem myHomeSystem;
 	private HashMap<String, SensorDevice> devByName;
 	private VeraDevice vera = null;
+	private HashMap<Integer, MotherSensor> mControllerMap = null;
+	private HashMap<Integer, LightLevelSensor> mLightMap = null;
+	private HashMap<Integer, MotionSensor> mMotionMap = null;
+	private HashMap<Integer, TemperatureSensor> mTemperatureMap = null;
 	private String devName;
 	private int devId;
 	private int idLight;
@@ -53,8 +57,6 @@ public class VeraService extends Service implements DataRetrieval {
 	private Handler mHandler = null;
 	
 	// Handling Threads
-	//private final int poolSize = 10;
-	//private ExecutorService threadPool = Executors.newFixedThreadPool(poolSize);
 	private ExecutorService threadPool = Executors.newCachedThreadPool();	
 	private final int SENSOR_QTY = 20;
 	private boolean interruptFlag[] = new boolean[SENSOR_QTY];
@@ -64,10 +66,9 @@ public class VeraService extends Service implements DataRetrieval {
 	private String request[] = {"user_data", "status", "sdata"};
 	private String format = "output_format=json";	
 	
-	
-	public void setInterruptFlag(boolean flag, int index) {
+	public void setInterruptFlag(boolean flag, int[] id) {
 		synchronized(lock_interruptFlag) {
-			this.interruptFlag[index] = flag;
+			this.interruptFlag[id[0]] = flag;
 		}
 	}
 	
@@ -88,6 +89,10 @@ public class VeraService extends Service implements DataRetrieval {
 		devId = intent.getIntExtra(Constant.EXTRA_DEVICE_ID, -1);
 		devName = intent.getStringExtra(Constant.EXTRA_DEVICE_NAME);
 		vera = (VeraDevice) devByName.get(devName);
+		mControllerMap = vera.getMotherSensor();
+		mLightMap = vera.getLightSensor();
+		mTemperatureMap = vera.getTemperatureSensor();
+		mMotionMap = vera.getMotionSensor();
 		return mBinder;
 	}
 	
@@ -127,22 +132,21 @@ public class VeraService extends Service implements DataRetrieval {
 	public void subscribeToSensor(int... id) {
 		Log.d(TAG, "Subscribe to Vera Sensor");
 		String targetURL = generateURL(request[2], format, vera);
-//		try {
-//			setInterruptFlag(false, id);
-//			threadPool.execute(new HttpClient(id, targetURL));
-//			
-//		} catch (MalformedURLException e) {
-//			e.printStackTrace();	
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}		
-		
+		try {
+			setInterruptFlag(false, id);
+			threadPool.execute(new HttpClient(id[0], targetURL, vera.getInterval()));
+			
+		} catch (MalformedURLException e) {
+			e.printStackTrace();	
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
 	}
 
 	@Override
 	public void unsubscribeFromSensor(int... id) {
 		Log.d(TAG, "Unsubscribe from Vera Sensor");
-		//setInterruptFlag(true, id);	
+		setInterruptFlag(true, id);	
 	}
 	
 	public String generateURL(String r, String f, VeraDevice vera) {
@@ -185,10 +189,12 @@ public class VeraService extends Service implements DataRetrieval {
 		private int tid;
 		private MotherSensor mSensor = null;
 		private String tag;
+		private int interval;
 				
-		public HttpClient(int id, String url) throws IOException {
+		public HttpClient(int id, String url, int interval) throws IOException {
 			this.vera_url = new URL(url);
 			this.tid = id;
+			this.interval = interval;
 
 			if(mLightMap.containsKey(id)) {
 				mSensor = mLightMap.get(id);
@@ -241,12 +247,13 @@ public class VeraService extends Service implements DataRetrieval {
 					
 					if(tag.equals("light")) {
 						((LightLevelSensor) mSensor).setLightLevel(Float.parseFloat(result));
-						setLightSensor(tid, (LightLevelSensor) mSensor);	
+						//setLightSensor(tid, (LightLevelSensor) mSensor);	
 					}
 					else if (tag.equals("temperature")) {
 						((TemperatureSensor) mSensor).setTemperature(Float.parseFloat(result));
-						setTemperatureSensor(tid, (TemperatureSensor) mSensor);
+						//setTemperatureSensor(tid, (TemperatureSensor) mSensor);
 					}
+					
 					Thread.sleep(interval*1000);
 					
 					if (getInterruptFlag(tid)) {

@@ -119,67 +119,9 @@ public class DeviceInfoActivity extends Activity {
 			vera = (VeraDevice) devByName.get(devName);
 			setVeraLayout();
 			Log.d(TAG, "Vera Sensor Type: " + vera.getSensorType());
-			vera.getDeviceInfo();
 			
-			HashMap<Integer, TemperatureSensor> mTemperatureMap = 
-					new HashMap<Integer, TemperatureSensor>();
-			HashMap<Integer, LightLevelSensor> mLightMap = 
-					new HashMap<Integer, LightLevelSensor>();
-			HashMap<Integer, MotionSensor> mMotionMap = 
-					new HashMap<Integer, MotionSensor>();
 			
-			try {
-				int size = VeraSensorQueue.mSensorSize.take();
-				for (int i=0; i<size; i++) {
-					MotherSensor mSensor = VeraSensorQueue.mSensorQueue.take();
-					if (mSensor instanceof TemperatureSensor)
-						mTemperatureMap.put(mSensor.getDeviceNum(), (TemperatureSensor) mSensor);
-					else if (mSensor instanceof LightLevelSensor)
-						mLightMap.put(mSensor.getDeviceNum(), (LightLevelSensor) mSensor);
-					else if (mSensor instanceof MotionSensor)
-						mMotionMap.put(mSensor.getDeviceNum(), (MotionSensor) mSensor);		
-				}
-				
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-			Iterator<Integer> mTemIt = mTemperatureMap.keySet().iterator();
-			Log.d(TAG, "Temperature Map key: " + mTemperatureMap.keySet());
-
-			Iterator<Integer> mLightIt = mLightMap.keySet().iterator();
-			Log.d(TAG, "Light Map key: " + mLightMap.keySet());
-
-			Iterator<Integer> mMotionIt = mMotionMap.keySet().iterator();
-			Log.d(TAG, "Light Map key: " + mMotionMap.keySet());
-
-			TemperatureSensor mTemSensor;
-			LightLevelSensor mLightSensor;
-			MotionSensor mMotionSensor;
-
-			while (mTemIt.hasNext()) {
-				idTem = mTemIt.next();
-				mTemSensor = mTemperatureMap.get(idTem);
-				veraSensorCheckBox1.setText("Temperature"+String.valueOf(idTem));	
-				Log.d(TAG, "Temperature id: " + idTem);
-			}
-
-			while (mLightIt.hasNext()) {
-				idLight = mLightIt.next();
-				mLightSensor = mLightMap.get(idLight);
-				veraSensorCheckBox2.setText("LightLevel"+String.valueOf(idLight));
-				Log.d(TAG, "Light id: " + idLight);
-			}
-
-
-			while (mMotionIt.hasNext()) {
-				idMotion = mMotionIt.next();
-				mMotionSensor = mMotionMap.get(idMotion);
-				veraSensorCheckBox3.setText("Motion"+String.valueOf(idMotion));
-				Log.d(TAG, "Motion id: " + idMotion);
-			}			
-			
-			vera.setHandler(mHandler);
+			//vera.setHandler(mHandler);
 			myHomeSystem.addDevicesByName(devName, vera);
 			
 			veraSensorCheckBox1.setOnCheckedChangeListener(new OnCheckedChangeListener() {

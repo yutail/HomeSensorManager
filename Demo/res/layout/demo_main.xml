@@ -9,24 +9,28 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
-
-    <Button
-        android:id="@+id/report_button"
-        android:layout_width="140dp"
-        android:layout_height="60dp"
-        android:layout_alignLeft="@+id/add_button"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="42dp"
-        android:text="Sensor Report" />
-
+	
+    <!--  
+    
     <Button
         android:id="@+id/add_button"
         android:layout_width="140dp"
         android:layout_height="60dp"
-        android:layout_above="@+id/report_button"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="66dp"
-        android:text="Add Device" />
+        android:layout_marginBottom="94dp"
+        android:text="Add Device" />    
+        
+    -->
+
+    <Button
+        android:id="@+id/report_button"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="83dp"
+        android:text="Home Sensor Report" />
 
 </RelativeLayout>
 

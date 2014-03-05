@@ -8,6 +8,11 @@ import com.homesystem.Service.Constant;
 import com.homesystem.Service.HomeSystem;
 import com.homesystem.Service.ISensorReportService;
 import com.homesystem.Service.Gateway.SensorDevice;
+import com.homesystem.Service.Gateway.Vera.IVeraService;
+import com.homesystem.Service.Gateway.Vera.VeraDevice;
+import com.homesystem.Service.Gateway.Vera.VeraSensor.LightLevelSensor;
+import com.homesystem.Service.Gateway.Vera.VeraSensor.MotionSensor;
+import com.homesystem.Service.Gateway.Vera.VeraSensor.TemperatureSensor;
 import com.homesystem.Service.Gateway.Veris.IVerisService;
 import com.homesystem.Service.Gateway.Veris.VerisDevice;
 
@@ -78,7 +83,7 @@ public class DeviceInfoActivity extends Activity {
 	private HashMap<String, SensorDevice> devByName;
 	private String devName;
 	private String deviceType = null;
-//		private VeraDevice vera = null;
+	private VeraDevice vera = null;
 	private VerisDevice veris = null;
 	//		private RaritanDevice raritan = null;
 	private int idTem;
@@ -87,13 +92,13 @@ public class DeviceInfoActivity extends Activity {
 	private int veris_value[];
 
 	// Service 
-	//		private VeraService mVeraService = null;
-	//		private VeraConnection mVeraConnection;
+	private IVeraService mVeraService = null;
+	private VeraConnection mVeraConnection;
 	private boolean mIsVeraBind = false;
 	private IVerisService mVerisService = null;
 	private VerisConnection mVerisConnection;
 	private boolean mIsVerisBind = false;
-	//		private RaritanService mRaritanService = null;
+	//		private IRaritanService mRaritanService = null;
 	//		private RaritanConnection mRaritanConnection;
 	private boolean mIsRaritanBind = false;
 
@@ -111,118 +116,90 @@ public class DeviceInfoActivity extends Activity {
 
 		// Vera Device
 		if (deviceType.equals(Constant.VERA_NAME)) {
-			//				vera = (VeraDevice) devByName.get(devName);
-			//				setVeraLayout();
-			//				Log.d(TAG, "Vera Sensor Type: " + vera.getSensorType());
-			//				vera.getDeviceInfo();
-			//				
-			//				HashMap<Integer, TemperatureSensor> mTemperatureMap = 
-			//						new HashMap<Integer, TemperatureSensor>();
-			//				HashMap<Integer, LightLevelSensor> mLightMap = 
-			//						new HashMap<Integer, LightLevelSensor>();
-			//				HashMap<Integer, MotionSensor> mMotionMap = 
-			//						new HashMap<Integer, MotionSensor>();
-			//				
-			//				try {
-			//					int size = VeraSensorQueue.mSensorSize.take();
-			//					for (int i=0; i<size; i++) {
-			//						MotherSensor mSensor = VeraSensorQueue.mSensorQueue.take();
-			//						if (mSensor instanceof TemperatureSensor)
-			//							mTemperatureMap.put(mSensor.getDeviceNum(), (TemperatureSensor) mSensor);
-			//						else if (mSensor instanceof LightLevelSensor)
-			//							mLightMap.put(mSensor.getDeviceNum(), (LightLevelSensor) mSensor);
-			//						else if (mSensor instanceof MotionSensor)
-			//							mMotionMap.put(mSensor.getDeviceNum(), (MotionSensor) mSensor);		
-			//					}
-			//					
-			//				} catch (InterruptedException e) {
-			//					e.printStackTrace();
-			//				}
-			//
-			//				Iterator<Integer> mTemIt = mTemperatureMap.keySet().iterator();
-			//				Log.d(TAG, "Temperature Map key: " + mTemperatureMap.keySet());
-			//
-			//				Iterator<Integer> mLightIt = mLightMap.keySet().iterator();
-			//				Log.d(TAG, "Light Map key: " + mLightMap.keySet());
-			//
-			//				Iterator<Integer> mMotionIt = mMotionMap.keySet().iterator();
-			//				Log.d(TAG, "Light Map key: " + mMotionMap.keySet());
-			//
-			//				TemperatureSensor mTemSensor;
-			//				LightLevelSensor mLightSensor;
-			//				MotionSensor mMotionSensor;
-			//
-			//				while (mTemIt.hasNext()) {
-			//					idTem = mTemIt.next();
-			//					mTemSensor = mTemperatureMap.get(idTem);
-			//					veraSensorCheckBox1.setText("Temperature"+String.valueOf(idTem));	
-			//					Log.d(TAG, "Temperature id: " + idTem);
-			//				}
-			//
-			//				while (mLightIt.hasNext()) {
-			//					idLight = mLightIt.next();
-			//					mLightSensor = mLightMap.get(idLight);
-			//					veraSensorCheckBox2.setText("LightLevel"+String.valueOf(idLight));
-			//					Log.d(TAG, "Light id: " + idLight);
-			//				}
-			//
-			//
-			//				while (mMotionIt.hasNext()) {
-			//					idMotion = mMotionIt.next();
-			//					mMotionSensor = mMotionMap.get(idMotion);
-			//					veraSensorCheckBox3.setText("Motion"+String.valueOf(idMotion));
-			//					Log.d(TAG, "Motion id: " + idMotion);
-			//				}			
-			//				
-			//				vera.setHandler(mHandler);
-			//				myHomeSystem.addDevicesByName(devName, vera);
-			//				
-			//				veraSensorCheckBox1.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			//					@Override
-			//					public void onCheckedChanged(CompoundButton buttonView,
-			//							boolean isChecked) {
-			//					
-			//						if (isChecked) {	
-			//							
-			//							Log.d(TAG, "Temp Service Started: " + idTem);
-			//							doBindVeraService(idTem);
-			//							
-			//						} else {
-			//							doUnbindVeraService();	
-			//							veraSensorValue1.setText("");
-			//							Log.d(TAG, "Temp Service Stopped");
-			//						}	
-			//					}
-			//				});
-			//				
-			//				veraSensorCheckBox2.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			//					@Override
-			//					public void onCheckedChanged(CompoundButton buttonView,
-			//							boolean isChecked) {
-			//						
-			//						if (isChecked) {
-			//							Log.d(TAG, "Light Service Started: " + idLight);
-			//							doBindVeraService(idLight);
-			//						} else {
-			//							doUnbindVeraService();	
-			//							Log.d(TAG, "Light Service Stopped");
-			//							veraSensorValue2.setText("");
-			//						}
-			//					}
-			//				});	
-			//				
-			//				veraSensorCheckBox3.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			//					@Override
-			//					public void onCheckedChanged(CompoundButton buttonView,
-			//							boolean isChecked) {
-			//						
-			//						if (isChecked) {
-			//							veraSensorValue3.setText("No Motion");
-			//						} else {
-			//							veraSensorValue3.setText("");
-			//						}					
-			//					}				
-			//				});		
+			vera = (VeraDevice) devByName.get(devName);
+			setVeraLayout();
+			Log.d(TAG, "Vera Sensor Type: " + vera.getSensorType());
+
+			HashMap<Integer, TemperatureSensor> mTemperatureMap = vera.getTemperatureSensor();
+			HashMap<Integer, LightLevelSensor> mLightMap = vera.getLightSensor();
+			HashMap<Integer, MotionSensor> mMotionMap = vera.getMotionSensor();
+
+			Iterator<Integer> mTemIt = mTemperatureMap.keySet().iterator();
+			Log.d(TAG, "Temperature Map key: " + mTemperatureMap.keySet());
+
+			Iterator<Integer> mLightIt = mLightMap.keySet().iterator();
+			Log.d(TAG, "Light Map key: " + mLightMap.keySet());
+
+			Iterator<Integer> mMotionIt = mMotionMap.keySet().iterator();
+			Log.d(TAG, "Light Map key: " + mMotionMap.keySet());
+
+			while (mTemIt.hasNext()) {
+				idTem = mTemIt.next();
+				TemperatureSensor mTemSensor = mTemperatureMap.get(idTem);
+				veraSensorCheckBox1.setText("Temperature"+String.valueOf(idTem));	
+				Log.d(TAG, "Temperature id: " + idTem);
+			}
+
+			while (mLightIt.hasNext()) {
+				idLight = mLightIt.next();
+				LightLevelSensor mLightSensor = mLightMap.get(idLight);
+				veraSensorCheckBox2.setText("LightLevel"+String.valueOf(idLight));
+				Log.d(TAG, "Light id: " + idLight);
+			}
+
+			while (mMotionIt.hasNext()) {
+				idMotion = mMotionIt.next();
+				MotionSensor mMotionSensor = mMotionMap.get(idMotion);
+				veraSensorCheckBox3.setText("Motion"+String.valueOf(idMotion));
+				Log.d(TAG, "Motion id: " + idMotion);
+			}			
+
+			myHomeSystem.addDevicesByName(devName, vera);
+
+			veraSensorCheckBox1.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+
+					if (isChecked) {
+						Log.d(TAG, "Temp Service Started: " + idTem);
+
+					} else {
+						
+						veraSensorValue1.setText("");
+						Log.d(TAG, "Temp Service Stopped");
+					}	
+				}
+			});
+
+			veraSensorCheckBox2.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+
+					if (isChecked) {
+						Log.d(TAG, "Light Service Started: " + idLight);
+						
+					} else {
+						
+						Log.d(TAG, "Light Service Stopped");
+						veraSensorValue2.setText("");
+					}
+				}
+			});	
+
+			veraSensorCheckBox3.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+
+					if (isChecked) {
+						veraSensorValue3.setText("No Motion");
+					} else {
+						veraSensorValue3.setText("");
+					}					
+				}				
+			});		
 		}
 		// Veris Device
 		else if (deviceType.equals(Constant.VERIS_NAME)) {
@@ -372,10 +349,10 @@ public class DeviceInfoActivity extends Activity {
 		veraSensorValue1 = (TextView) findViewById(R.id.sensor_value1);
 		veraSensorValue2 = (TextView) findViewById(R.id.sensor_value2);
 		veraSensorValue3 = (TextView) findViewById(R.id.sensor_value3);	
-		//			veraNameText.setText(vera.getName());
-		//			veraLocText.setText(vera.getLocation());
-		//			veraIpText.setText(vera.getIp());
-		//			veraIntervalText.setText(String.valueOf(vera.getInterval()));
+		veraNameText.setText(vera.getName());
+		veraLocText.setText(vera.getLocation());
+		veraIpText.setText(vera.getIp());
+		veraIntervalText.setText(String.valueOf(vera.getInterval()));
 	}
 
 	public void setVerisLayout() {
@@ -423,46 +400,37 @@ public class DeviceInfoActivity extends Activity {
 	}
 
 
-	//		private class VeraConnection implements ServiceConnection {
-	//			@Override
-	//		    public void onServiceConnected(ComponentName className, IBinder service) {
-	//		        // This is called when the connection with the service has been
-	//		        // established, giving us the service object we can use to
-	//		        // interact with the service.  Because we have bound to a explicit
-	//		        // service that we know is running in our own process, we can
-	//		        // cast its IBinder to a concrete class and directly access it.
-	//				mVeraService = ((VeraService.VeraBinder)service).getService();
-	//		        Log.d(TAG, "Vera Service Connected");
-	//		    }
-	//
-	//			@Override
-	//		    public void onServiceDisconnected(ComponentName className) {
-	//		        // This is called when the connection with the service has been
-	//		        // unexpectedly disconnected -- that is, its process crashed.
-	//		        // Because it is running in our same process, we should never
-	//		        // see this happen.
-	//		        mVeraService = null;
-	//		        Log.d(TAG, "Vera Serivce Disconnected");
-	//		    }	
-	//		}
-	//		
-	//		public void doBindVeraService(int id) {
-	//			Log.d(TAG, "Bind Vera Service");
-	//			mVeraConnection = new VeraConnection();
-	//			Intent veraRetrievalIntent = new Intent(getApplicationContext(), VeraService.class);
-	//			veraRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_NAME, devName);
-	//			veraRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_ID, id);
-	//			bindService(veraRetrievalIntent, mVeraConnection, Context.BIND_AUTO_CREATE);	
-	//			mIsVeraBind = true;
-	//		}
-	//		
-	//		public void doUnbindVeraService() {
-	//			if (mIsVeraBind) {
-	//				Log.d(TAG, "Unbind Vera Service");
-	//				unbindService(mVeraConnection);
-	//				mIsVeraBind = false;
-	//			}
-	//		}
+	private class VeraConnection implements ServiceConnection {
+		@Override
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			mVeraService = IVeraService.Stub.asInterface(service);
+			Log.d(TAG, "Remote Vera Service Connected");
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName className) {
+			mVeraService = null;
+			Log.d(TAG, "Remote Vera Serivce Disconnected");
+		}	
+	}
+
+	public void doBindVeraService(int id) {
+		Log.d(TAG, "Bind Vera Service");
+		mVeraConnection = new VeraConnection();
+		Intent veraRetrievalIntent = new Intent("");
+		veraRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_NAME, devName);
+		veraRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_ID, id);
+		bindService(veraRetrievalIntent, mVeraConnection, Context.BIND_AUTO_CREATE);	
+		mIsVeraBind = true;
+	}
+
+	public void doUnbindVeraService() {
+		if (mIsVeraBind) {
+			Log.d(TAG, "Unbind Vera Service");
+			unbindService(mVeraConnection);
+			mIsVeraBind = false;
+		}
+	}
 
 	private class VerisConnection implements ServiceConnection {
 		@Override

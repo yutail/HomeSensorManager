@@ -82,14 +82,14 @@ public class SensorReportService extends Service {
 	
 	}
 	
-	public void getVeraDeviceInfo(VeraDevice vera) {		
+	public void getVeraDeviceInfo(VeraDevice vera) {	
 		
 		threadPool.submit(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					// HTTP connection
-					URL targetURL = new URL("http://ip_address:3480/data_request?id=sdata&output_format=json");
+					URL targetURL = new URL("http://172.17.5.117:3480/data_request?id=sdata&output_format=json");
 					HttpURLConnection http_connection = (HttpURLConnection) targetURL.openConnection();
 					http_connection.setRequestMethod("GET");
 					http_connection.setDoOutput(false);
@@ -147,8 +147,6 @@ public class SensorReportService extends Service {
 							VeraSensorQueue.mSensorQueue.add(mMotion);
 						}
 					}
-//					Log.d(TAG, "Inner Light Map key: " + VeraDevice.this.mLightMap.keySet());
-//					Log.d(TAG, "Inner Temperature Map key: " + VeraDevice.this.mTemperatureMap.keySet());
 
 				}  catch (MalformedURLException e) {
 					e.printStackTrace();
@@ -164,6 +162,7 @@ public class SensorReportService extends Service {
 		
 		try {
 			int size = VeraSensorQueue.mSensorSize.take();
+			Log.d(TAG, "Sensor Qty: " + size);
 			for (int i=0; i<size; i++) {
 				MotherSensor mSensor = VeraSensorQueue.mSensorQueue.take();
 				if (mSensor instanceof TemperatureSensor)
