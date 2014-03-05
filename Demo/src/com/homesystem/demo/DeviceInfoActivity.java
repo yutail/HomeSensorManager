@@ -272,9 +272,10 @@ public class DeviceInfoActivity extends Activity {
 						}
 
 					} else {
-						doUnbindVerisService();
+						
 						try {
-							mVerisService.unregisterVerisCallback(mVerisCallback);
+							mVerisService.stopDataRetrieval();
+							
 						} catch (RemoteException e) {
 							e.printStackTrace();
 						}
@@ -303,8 +304,10 @@ public class DeviceInfoActivity extends Activity {
 						boolean isChecked) {
 					int id = Integer.parseInt(raritanVoltageEdit.getText().toString());
 					if (isChecked) {
+						int interval = Integer.parseInt(raritanIntervalText.getText().toString());
 						try {
 							mRaritanService.setChannel(Constant.RARITAN_VOLTAGE);
+							mRaritanService.setInterval(interval);
 							mRaritanService.startDataRetrieval(id);
 						} catch (RemoteException e) {
 							e.printStackTrace();
@@ -328,8 +331,10 @@ public class DeviceInfoActivity extends Activity {
 						boolean isChecked) {
 					int id = Integer.parseInt(raritanActivePowerEdit.getText().toString());
 					if (isChecked) {
+						int interval = Integer.parseInt(raritanIntervalText.getText().toString());
 						try {
 							mRaritanService.setChannel(Constant.RARITAN_ACTIVE_POWER);
+							mRaritanService.setInterval(interval);
 							mRaritanService.startDataRetrieval(id);
 						} catch (RemoteException e) {
 							e.printStackTrace();
@@ -353,8 +358,10 @@ public class DeviceInfoActivity extends Activity {
 						boolean isChecked) {
 					int id = Integer.parseInt(raritanCurrentEdit.getText().toString());
 					if (isChecked) {
+						int interval = Integer.parseInt(raritanIntervalText.getText().toString());
 						try {
 							mRaritanService.setChannel(Constant.RARITAN_CURRENT);
+							mRaritanService.setInterval(interval);
 							mRaritanService.startDataRetrieval(id);
 						} catch (RemoteException e) {
 							e.printStackTrace();
@@ -401,6 +408,17 @@ public class DeviceInfoActivity extends Activity {
 	public void onDestroy() {
 		super.onDestroy();
 		Log.d(TAG, "onDestroy");
+		doUnbindVeraService();
+		doUnbindVerisService();
+		doUnbindRaritanService();
+		try {
+			mVeraService.unregisterVeraCallback(mVeraCallback);
+			mVerisService.unregisterVerisCallback(mVerisCallback);
+			mRaritanService.unregisterRaritanCallback(mRaritanCallback);
+		} catch (RemoteException e) {
+			
+			e.printStackTrace();
+		}
 	}
 
 	public void setVeraLayout() {
