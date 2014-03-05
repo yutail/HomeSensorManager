@@ -34,6 +34,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -53,10 +54,17 @@ public class VeraService extends Service implements DataRetrieval {
 	private int devId;
 	private int idLight;
 	
-	// Handler
-	private Handler mHandler = null;
 	// Sampling Interval
 	private int interval = 10;
+	
+	private RemoteCallbackList<IVeraServiceCallback> mVeraCallbackList = 
+			new RemoteCallbackList<IVeraServiceCallback>();
+	
+	// Handling Messages
+	private static final int REPORT_MSG = 1;
+	private static final String VERA_VALUE = "vera_value";
+	private static final String VERA_SUBTYPE = "vera_subtype";
+	private static final String VERA_ID = "vera_id";
 	
 	// Handling Threads
 	private ExecutorService threadPool = Executors.newCachedThreadPool();	
@@ -79,11 +87,6 @@ public class VeraService extends Service implements DataRetrieval {
 			return this.interruptFlag[index];
 		}	
 	}
-	
-	public void setHandler(Handler handler) {
-		this.mHandler = handler;
-	}
-    
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -107,6 +110,48 @@ public class VeraService extends Service implements DataRetrieval {
 		public void setInterval(int i) throws RemoteException {
 			interval = i;
 		}
+
+		@Override
+		public void registerVeraCallback(IVeraServiceCallback vera_cb)
+				throws RemoteException {
+			if (vera_cb != null)
+				mVeraCallbackList.register(vera_cb);
+		}
+
+		@Override
+		public void unregisterVeraCallback(IVeraServiceCallback vera_cb)
+				throws RemoteException {
+			if (vera_cb != null)
+				mVeraCallbackList.unregister(vera_cb);
+		}
+	};
+	
+	// Handler
+	private final Handler mHandler = new Handler() {
+		@Override 
+		public void handleMessage(Message msg) {
+			switch(msg.what) {
+			case REPORT_MSG: {
+				String vera_value = msg.getData().getString(VERA_VALUE);
+				String tag = msg.getData().getString(VERA_SUBTYPE);
+				
+				// Broadcast to client the new value.
+                final int num = mVeraCallbackList.beginBroadcast();
+                Log.d(TAG, "Number of Clients: " + num);
+                try {
+                	mVeraCallbackList.getBroadcastItem(num-1).updateVeraValue(vera_value, tag);
+                } catch (RemoteException e) {
+                	e.printStackTrace();
+                }
+                mVeraCallbackList.finishBroadcast();
+				
+			} break;
+			
+			default:
+				super.handleMessage(msg);
+			
+			}	
+		}	
 	};
 	
 	@Override
@@ -241,12 +286,12 @@ public class VeraService extends Service implements DataRetrieval {
 					String result = retrieveData(devInfo, tid, tag);
 					Log.d(TAG, "Received Data: " + tag + ": " + result);
 					
-					// Send the name of the connected device back to the UI Activity
-			        Message msg = mHandler.obtainMessage(Constant.VERA_MESSAGE);
+					// Sending message to update UI
+			        Message msg = mHandler.obtainMessage(REPORT_MSG);
 			        Bundle bundle = new Bundle();
-			        bundle.putString(Constant.VERA_VALUE, result);
-			        bundle.putInt(Constant.VERA_ID, tid);
-			        bundle.putString(Constant.VERA_SUBTYPE, tag);
+			        bundle.putString(VERA_VALUE, result);
+			        bundle.putString(VERA_SUBTYPE, tag);
+			        bundle.putInt(VERA_ID, tid);
 			        msg.setData(bundle);
 			        mHandler.sendMessage(msg);
 					

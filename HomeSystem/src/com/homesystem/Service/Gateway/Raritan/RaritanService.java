@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -53,10 +54,17 @@ public class RaritanService extends Service implements DataRetrieval {
 	private boolean interruptFlag[] = new boolean[CHANNEL_NUM];
 	private Object lock_interruptFlag = new Object();
 	
-	// Handling Message
-	private Handler mHandler;
 	// Sampling Interval
 	private int interval = 10;
+	
+	private RemoteCallbackList<IRaritanServiceCallback> mRaritanCallbackList = 
+			new RemoteCallbackList<IRaritanServiceCallback>();
+	
+	// Hanlding Messages
+	private static final int REPORT_MSG = 1;
+	private static final String RARITAN_VALUE = "raritan_value";
+	private static final String RARITAN_CHANNEL = "raritan_channel";
+	private static final String RARITAN_OUTLET = "raritan_outlet";
 	
 	public synchronized void setInterruptFlag(boolean flag, int id) {
 		this.interruptFlag[id] = flag;
@@ -64,10 +72,6 @@ public class RaritanService extends Service implements DataRetrieval {
 	
 	public synchronized boolean getInterruptFlag(int id) {
 		return interruptFlag[id];
-	}
-	
-	public void setHandler(Handler handler) {
-		this.mHandler = handler;
 	}
 
 	@Override
@@ -87,6 +91,47 @@ public class RaritanService extends Service implements DataRetrieval {
 		
 		public void setInterval(int i) throws RemoteException {
 			interval = i;
+		}
+
+		@Override
+		public void registerRaritanCallback(IRaritanServiceCallback raritan_cb)
+				throws RemoteException {
+			mRaritanCallbackList.register(raritan_cb);
+			
+		}
+
+		@Override
+		public void unregisterRaritanCallback(IRaritanServiceCallback raritan_cb)
+				throws RemoteException {
+			mRaritanCallbackList.unregister(raritan_cb);
+			
+		}
+	};
+	
+	// Handler
+	private final Handler mHandler = new Handler() {
+		@Override 
+		public void handleMessage(Message msg) {
+			switch(msg.what) {
+			case REPORT_MSG: {
+				String raritan_value = msg.getData().getString(RARITAN_VALUE);
+				String channel = msg.getData().getString(RARITAN_CHANNEL);
+				
+				final int num = mRaritanCallbackList.beginBroadcast();
+                Log.d(TAG, "Number of Clients: " + num);
+                try {
+                	mRaritanCallbackList.getBroadcastItem(num-1).updateRaritanValue(raritan_value, channel);
+                } catch (RemoteException e) {
+                	e.printStackTrace();
+                }
+                mRaritanCallbackList.finishBroadcast();
+				
+			} break;
+			
+			default:
+				super.handleMessage(msg);
+			}
+			
 		}
 	};
 
@@ -154,14 +199,6 @@ public class RaritanService extends Service implements DataRetrieval {
 		public void run() {
 			while (true) {
 				if (Thread.interrupted()) {
-					// Send the name of the connected device back to the UI Activity
-//			        Message msg = mHandler.obtainMessage(Constant.RARITAN_MESSAGE);
-//			        Bundle bundle = new Bundle();
-//			        bundle.putString(Constant.RARITAN_CHANNEL, client_channel);
-//			        bundle.putInt(Constant.RARITAN_OUTLET, client_outlet);
-//			        bundle.putString(Constant.RARITAN_VALUE, "");
-//			        msg.setData(bundle);
-//			        mHandler.sendMessage(msg);
 					return;
 				}
 				
@@ -169,13 +206,13 @@ public class RaritanService extends Service implements DataRetrieval {
 					start();
 					String result = getAsString(new OID(targetIOD));
 					// Send the name of the connected device back to the UI Activity
-//			        Message msg = mHandler.obtainMessage(Constant.RARITAN_MESSAGE);
-//			        Bundle bundle = new Bundle();
-//			        bundle.putString(Constant.RARITAN_CHANNEL, client_channel);
-//			        bundle.putInt(Constant.RARITAN_OUTLET, client_outlet);
-//			        bundle.putString(Constant.RARITAN_VALUE, result);
-//			        msg.setData(bundle);
-//			        mHandler.sendMessage(msg);
+			        Message msg = mHandler.obtainMessage(REPORT_MSG);
+			        Bundle bundle = new Bundle();
+			        bundle.putString(RARITAN_CHANNEL, client_channel);
+			        bundle.putInt(RARITAN_OUTLET, client_outlet);
+			        bundle.putString(RARITAN_VALUE, result);
+			        msg.setData(bundle);
+			        mHandler.sendMessage(msg);
 					Log.d(TAG, result);
 					
 					Thread.sleep(interval*1000);

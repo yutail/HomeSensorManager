@@ -156,10 +156,6 @@ public class VeraDevice extends SensorDevice implements Parcelable {
 			return this.mMotionMap;
 		}
 	}
-	
-
-	
-	
 		
 	// Implement Parcelable
 	@Override

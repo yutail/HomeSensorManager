@@ -9,8 +9,10 @@ import com.homesystem.Service.HomeSystem;
 import com.homesystem.Service.ISensorReportService;
 import com.homesystem.Service.Gateway.SensorDevice;
 import com.homesystem.Service.Gateway.Raritan.IRaritanService;
+import com.homesystem.Service.Gateway.Raritan.IRaritanServiceCallback;
 import com.homesystem.Service.Gateway.Raritan.RaritanDevice;
 import com.homesystem.Service.Gateway.Vera.IVeraService;
+import com.homesystem.Service.Gateway.Vera.IVeraServiceCallback;
 import com.homesystem.Service.Gateway.Vera.VeraDevice;
 import com.homesystem.Service.Gateway.Vera.VeraSensor.LightLevelSensor;
 import com.homesystem.Service.Gateway.Vera.VeraSensor.MotionSensor;
@@ -111,8 +113,10 @@ public class DeviceInfoActivity extends Activity {
 	private static final int VERIS_MESSAGE = 2;
 	private static final int RARITAN_MESSAGE = 3;
 	private static final String VERA_VALUE = "vera_value";
+	private static final String VERA_SUBTYPE = "vera_subtype";
 	private static final String VERIS_VALUE = "veris_value";
 	private static final String RARITAN_VALUE = "raritan_value";
+	private static final String RARITAN_CHANNEL = "raritan_channel";
 	
 
 	@Override
@@ -437,6 +441,11 @@ public class DeviceInfoActivity extends Activity {
 		@Override
 		public void onServiceConnected(ComponentName className, IBinder service) {
 			mVeraService = IVeraService.Stub.asInterface(service);
+			try {
+				mVeraService.registerVeraCallback(mVeraCallback);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
 			Log.d(TAG, "Remote Vera Service Connected");
 		}
 
@@ -463,6 +472,20 @@ public class DeviceInfoActivity extends Activity {
 			mIsVeraBind = false;
 		}
 	}
+	
+	// VeraService Callback
+	private IVeraServiceCallback mVeraCallback = new IVeraServiceCallback.Stub() {
+		
+		@Override
+		public void updateVeraValue(String value, String tag) throws RemoteException {
+	        Message msg = mHandler.obtainMessage(VERA_MESSAGE);
+	        Bundle bundle = new Bundle();
+	        bundle.putString(VERA_VALUE, value);	
+	        bundle.putString(VERA_SUBTYPE, tag);
+	        msg.setData(bundle);
+	        mHandler.sendMessage(msg);		
+		}
+	};
 	
 	// Veris Service Connection
 	private class VerisConnection implements ServiceConnection {
@@ -503,7 +526,6 @@ public class DeviceInfoActivity extends Activity {
 	
 	// VerisService Callback
 	private IVerisServiceCallback mVerisCallback = new IVerisServiceCallback.Stub() {
-
 		@Override
 		public void updateVerisValue(int[] value) throws RemoteException {
 	        Message msg = mHandler.obtainMessage(VERIS_MESSAGE);
@@ -545,6 +567,20 @@ public class DeviceInfoActivity extends Activity {
 			mIsRaritanBind = false;
 		}
 	}
+	
+	// RaritanService Callback
+	private IRaritanServiceCallback mRaritanCallback = new IRaritanServiceCallback.Stub() {
+		
+		@Override
+		public void updateRaritanValue(String value, String channel)
+				throws RemoteException {
+			Message msg = mHandler.obtainMessage(RARITAN_MESSAGE);
+			Bundle bundle = new Bundle();
+			bundle.putString(RARITAN_VALUE, value);
+			bundle.putString(RARITAN_CHANNEL, channel);
+			msg.setData(bundle);			
+		}
+	};
 
 	// The Handler that gets information back from the Worker Thread
 	private final Handler mHandler = new Handler() {
@@ -553,7 +589,7 @@ public class DeviceInfoActivity extends Activity {
 			switch (msg.what) {
 			case VERA_MESSAGE:
 				String vera_value = msg.getData().getString(VERA_VALUE);
-				String vera_type = msg.getData().getString(Constant.VERA_SUBTYPE);
+				String vera_type = msg.getData().getString(VERA_SUBTYPE);
 				if (vera_type.equals("temperature"))
 					veraSensorValue1.setText(vera_value);
 				else if (vera_type.equals("light"))
@@ -569,7 +605,7 @@ public class DeviceInfoActivity extends Activity {
 
 			case RARITAN_MESSAGE:
 				String raritan_value = msg.getData().getString(RARITAN_VALUE);
-				String channel = msg.getData().getString(Constant.RARITAN_CHANNEL);
+				String channel = msg.getData().getString(RARITAN_CHANNEL);
 				Log.d(TAG, "Received Channel Value: " + channel);
 				if (channel.equals(Constant.RARITAN_VOLTAGE))
 					raritanVoltageValue.setText(raritan_value);	

@@ -42,6 +42,17 @@ case INTERFACE_TRANSACTION:
 reply.writeString(DESCRIPTOR);
 return true;
 }
+case TRANSACTION_updateVeraValue:
+{
+data.enforceInterface(DESCRIPTOR);
+java.lang.String _arg0;
+_arg0 = data.readString();
+java.lang.String _arg1;
+_arg1 = data.readString();
+this.updateVeraValue(_arg0, _arg1);
+reply.writeNoException();
+return true;
+}
 }
 return super.onTransact(code, data, reply, flags);
 }
@@ -60,6 +71,24 @@ public java.lang.String getInterfaceDescriptor()
 {
 return DESCRIPTOR;
 }
+@Override public void updateVeraValue(java.lang.String value, java.lang.String tag) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeString(value);
+_data.writeString(tag);
+mRemote.transact(Stub.TRANSACTION_updateVeraValue, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
 }
 }
+}
+static final int TRANSACTION_updateVeraValue = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
+}
+public void updateVeraValue(java.lang.String value, java.lang.String tag) throws android.os.RemoteException;
 }
