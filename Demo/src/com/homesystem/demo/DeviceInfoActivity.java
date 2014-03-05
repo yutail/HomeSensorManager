@@ -301,9 +301,9 @@ public class DeviceInfoActivity extends Activity {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView,
 						boolean isChecked) {
+					int id = Integer.parseInt(raritanVoltageEdit.getText().toString());
 					if (isChecked) {
 						raritan.setChannel(Constant.RARITAN_VOLTAGE);
-						int id = Integer.parseInt(raritanVoltageEdit.getText().toString());
 						try {
 							mRaritanService.startDataRetrieval(id);
 						} catch (RemoteException e) {
@@ -312,6 +312,12 @@ public class DeviceInfoActivity extends Activity {
 						
 					} else {
 						
+						try {
+							mRaritanService.stopDataRetrieval(id);
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						raritanVoltageValue.setText("");	
 					}	
 				}	
@@ -321,10 +327,10 @@ public class DeviceInfoActivity extends Activity {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView,
 						boolean isChecked) {
+					int id = Integer.parseInt(raritanActivePowerEdit.getText().toString());
 					if (isChecked) {
-
 						raritan.setChannel(Constant.RARITAN_ACTIVE_POWER);
-						int id = Integer.parseInt(raritanActivePowerEdit.getText().toString());
+						
 						try {
 							mRaritanService.startDataRetrieval(id);
 						} catch (RemoteException e) {
@@ -333,6 +339,11 @@ public class DeviceInfoActivity extends Activity {
 
 					} else {
 						
+						try {
+							mRaritanService.stopDataRetrieval(id);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}						
 						raritanActivePowerValue.setText("");
 					}	
 				}	
@@ -342,10 +353,10 @@ public class DeviceInfoActivity extends Activity {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView,
 						boolean isChecked) {
+					int id = Integer.parseInt(raritanCurrentEdit.getText().toString());
 					if (isChecked) {
 
 						raritan.setChannel(Constant.RARITAN_CURRENT);
-						int id = Integer.parseInt(raritanCurrentEdit.getText().toString());
 						try {
 							mRaritanService.startDataRetrieval(id);
 						} catch (RemoteException e) {
@@ -353,7 +364,11 @@ public class DeviceInfoActivity extends Activity {
 						}				
 
 					} else {
-						
+						try {
+							mRaritanService.stopDataRetrieval(id);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}						
 						raritanCurrentValue.setText("");
 					}	
 				}	
