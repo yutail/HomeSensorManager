@@ -53,17 +53,17 @@ public class SensorReportService extends Service {
 		public HomeSystem reportHomeSensor() throws RemoteException {
 			
 			VeraDevice vera = new VeraDevice.VeraBuilder("nesl", "vera1", "Vera 2", "172.17.5.117").
-					setInterval(10).setPort(3480).build();
+					setPort(3480).build();
 			getVeraDeviceInfo(vera);			
 			myHomeSystem.addDevicesByName("vera1", vera);
 			
 			VerisDevice veris = new VerisDevice.VerisBuilder("nesl", "veris1", "Veris E30", 
-					"128.97.93.90", 2251).setInterval(10).setPort(4660).
+					"128.97.93.90", 2251).setPort(4660).
 					setRegQty(40).build();
 			myHomeSystem.addDevicesByName("veris1", veris);
 			
 			RaritanDevice raritan = new RaritanDevice.RaritanBuilder("nesl backroom", "raritan1", "Raritan Dominion", 
-					"172.17.5.174").setInterval(10).setPort(161).setUsername("admin").
+					"172.17.5.174").setPort(161).setUsername("admin").
 					setPassword("abcd").build();
 			myHomeSystem.addDevicesByName("raritan1", raritan);
 			

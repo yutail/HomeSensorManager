@@ -177,7 +177,7 @@ public class AddDeviceActivity extends Activity {
 //						setInterval(interval).setPort(portNum).build(); 
 					
 					vera = new VeraDevice.VeraBuilder("nesl", "vera1", sensor_type, "172.17.5.117").
-							setInterval(10).setPort(3480).build();
+							setPort(3480).build();
 					
 					MotherSensor mother = new MotherSensor(1,2,3,"mother");
 					vera.setMotherSensor(3, mother);
@@ -195,7 +195,7 @@ public class AddDeviceActivity extends Activity {
 //							setRegQty(mod_reg_qty).build();
 					
 					veris = new VerisDevice.VerisBuilder("nesl", "veris1", sensor_type, 
-							"128.97.93.90", 2251).setInterval(10).setPort(4660).
+							"128.97.93.90", 2251).setPort(4660).
 							setRegQty(40).build();
 					
 					Intent verisIntent = new Intent();
@@ -208,7 +208,7 @@ public class AddDeviceActivity extends Activity {
 //							setUsername(username).setPassword(password).build();
 					
 					raritan = new RaritanDevice.RaritanBuilder("nesl", "raritan1", sensor_type, 
-							"172.17.5.174").setInterval(10).setPort(161).setUsername("admin").
+							"172.17.5.174").setPort(161).setUsername("admin").
 							setPassword("abcd").build();
 					
 					Intent raritanIntent = new Intent();

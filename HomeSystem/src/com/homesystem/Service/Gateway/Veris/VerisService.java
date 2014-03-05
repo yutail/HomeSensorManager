@@ -8,8 +8,6 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -20,7 +18,6 @@ import com.homesystem.Service.Gateway.SensorDevice;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -43,6 +40,16 @@ public class VerisService extends Service implements DataRetrieval {
 	
 	// Handler
 	private Handler mHandler;
+	// Sampling interval 
+	int interval = 10;
+	
+	public void setInterval(int i) {	
+		this.interval = i;
+	}
+	
+	public int getInterval() {	
+		return this.interval;
+	}
 	
 	public synchronized void setFlag(boolean flag) {
 		this.interruptFlag = flag;
@@ -69,6 +76,10 @@ public class VerisService extends Service implements DataRetrieval {
 		@Override
 		public void startDataRetrieval() throws RemoteException {
 			subscribeToSensor();	
+		}
+		
+		public void setInterval(int i) throws RemoteException {
+			interval = i;
 		}
 	};
 	
@@ -98,12 +109,11 @@ public class VerisService extends Service implements DataRetrieval {
 		int modbus_reg_addr = veris.getRegAddr();
 		int modbus_reg_qty = veris.getRegQty();
 		int func = veris.getModbusFunc();
-		int inter = veris.getInterval();
 		
 		try {
 			threadPool.execute(new ModbusRTUClient(ip_address, 
 					port, modbus_addr, modbus_reg_addr, 
-					modbus_reg_qty, func, inter));
+					modbus_reg_qty, func, interval));
 				
 		} catch (UnknownHostException e) {
 			e.printStackTrace();

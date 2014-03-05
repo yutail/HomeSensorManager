@@ -49,7 +49,7 @@ public class RaritanDevice extends SensorDevice implements Parcelable {
 		private String ip_address;
 		
 		//Optional Parameters 
-		private int interval = 1000;
+		private int interval = 10;
 		private String password = "abcd";
 		private String username = "admin";
 		private int port = 161;
@@ -60,11 +60,6 @@ public class RaritanDevice extends SensorDevice implements Parcelable {
 			this.name = name;
 			this.sensorType = sensorType;
 			this.ip_address = ip;			
-		}
-
-		public RaritanBuilder setInterval(int val) {
-			this.interval = val;
-			return this;
 		}
 		
 		public RaritanBuilder setUsername(String s) {
@@ -95,7 +90,6 @@ public class RaritanDevice extends SensorDevice implements Parcelable {
 	private RaritanDevice(RaritanBuilder builder) {
 		this.location = builder.location;
 		this.ip_address = builder.ip_address;
-		this.interval = builder.interval;
 		this.name = builder.name;
 		this.password = builder.password;
 		this.port = builder.port;
@@ -141,7 +135,6 @@ public class RaritanDevice extends SensorDevice implements Parcelable {
 		dest.writeString(sensorType);
 		dest.writeString(username);
 		dest.writeString(password);
-		dest.writeInt(interval);
 		dest.writeInt(port);
 		dest.writeInt(outletNum);
 	}
@@ -164,7 +157,6 @@ public class RaritanDevice extends SensorDevice implements Parcelable {
 		sensorType = in.readString();
 		username = in.readString();
 		password = in.readString();
-		interval = in.readInt();
 		port = in.readInt();
 		outletNum = in.readInt();
 	}	

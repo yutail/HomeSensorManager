@@ -84,11 +84,6 @@ public class VeraDevice extends SensorDevice implements Parcelable {
 			this.ip_address = ip;			
 		}
 		
-		public VeraBuilder setInterval(int val) {	
-			this.interval = val;
-			return this;
-		}
-		
 		public VeraBuilder setPort(int p) {	
 			this.port = p;
 			return this;
@@ -103,7 +98,6 @@ public class VeraDevice extends SensorDevice implements Parcelable {
 		this.location = builder.location;
 		this.ip_address = builder.ip_address;
 		this.name = builder.name;
-		this.interval = builder.interval;
 		this.sensorType = builder.sensorType;
 		this.port = builder.port;	
 //		mControllerMap = new Bundle(MotherSensor.class.getClassLoader());
@@ -177,7 +171,6 @@ public class VeraDevice extends SensorDevice implements Parcelable {
 		dest.writeString(ip_address);
 		dest.writeString(sensorType);
 		dest.writeInt(port);
-		dest.writeInt(interval);
 		dest.writeMap(mControllerMap);
 		dest.writeMap(mLightMap);
 		dest.writeMap(mMotionMap);
@@ -201,7 +194,6 @@ public class VeraDevice extends SensorDevice implements Parcelable {
 		ip_address = in.readString();
 		sensorType = in.readString();
 		port = in.readInt();
-		interval = in.readInt();
 		in.readMap(mControllerMap, MotherSensor.class.getClassLoader());
 		in.readMap(mLightMap, LightLevelSensor.class.getClassLoader());
 		in.readMap(mMotionMap, MotionSensor.class.getClassLoader());

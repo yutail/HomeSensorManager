@@ -55,6 +55,8 @@ public class VeraService extends Service implements DataRetrieval {
 	
 	// Handler
 	private Handler mHandler = null;
+	// Sampling Interval
+	private int interval = 10;
 	
 	// Handling Threads
 	private ExecutorService threadPool = Executors.newCachedThreadPool();	
@@ -101,6 +103,10 @@ public class VeraService extends Service implements DataRetrieval {
 		public void startDataRetrieval(int id) throws RemoteException {
 			subscribeToSensor(id);
 		}
+		
+		public void setInterval(int i) throws RemoteException {
+			interval = i;
+		}
 	};
 	
 	@Override
@@ -133,7 +139,7 @@ public class VeraService extends Service implements DataRetrieval {
 		String targetURL = generateURL(request[2], format, vera);
 		try {
 			setInterruptFlag(false, id[0]);
-			threadPool.execute(new HttpClient(id[0], targetURL, vera.getInterval()));
+			threadPool.execute(new HttpClient(id[0], targetURL, interval));
 			
 		} catch (MalformedURLException e) {
 			e.printStackTrace();	

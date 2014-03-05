@@ -54,7 +54,9 @@ public class RaritanService extends Service implements DataRetrieval {
 	private Object lock_interruptFlag = new Object();
 	
 	// Handling Message
-	private Handler mHandler;	
+	private Handler mHandler;
+	// Sampling Interval
+	private int interval = 10;
 	
 	public synchronized void setInterruptFlag(boolean flag, int id) {
 		this.interruptFlag[id] = flag;
@@ -80,8 +82,11 @@ public class RaritanService extends Service implements DataRetrieval {
 	private final IRaritanService.Stub mBinder = new IRaritanService.Stub() {
 		@Override
 		public void startDataRetrieval(int id) throws RemoteException {
-			subscribeToSensor(id);
-			
+			subscribeToSensor(id);	
+		}
+		
+		public void setInterval(int i) throws RemoteException {
+			interval = i;
 		}
 	};
 
@@ -106,7 +111,7 @@ public class RaritanService extends Service implements DataRetrieval {
 		threadPool.execute(new RaritanSNMPManager(raritan.getIp(),
 				raritan.getPort(), id[0], 
 				raritan.getPassword(), raritan.getChannel(),
-				raritan.getInterval()));		 	
+				interval));		 	
 	}
 
 	@Override

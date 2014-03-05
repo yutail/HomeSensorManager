@@ -92,6 +92,7 @@ public class DeviceInfoActivity extends Activity {
 	private int idLight;
 	private int idMotion;
 	private int veris_value[];
+	private int interval;
 
 	// Service 
 	private IVeraService mVeraService = null;
@@ -165,6 +166,7 @@ public class DeviceInfoActivity extends Activity {
 					if (isChecked) {
 						Log.d(TAG, "Temp Service Started: " + idTem);
 						try {
+							mVeraService.setInterval(10);
 							mVeraService.startDataRetrieval(idTem);
 						} catch (RemoteException e) {
 							
@@ -229,9 +231,10 @@ public class DeviceInfoActivity extends Activity {
 					if (isChecked) {
 						int len = veris.getRegQty();
 						veris_value = new int[len];
+						interval = Integer.parseInt(verisIntervalText.getText().toString());
 						
-
 						try {
+							mVerisService.setInterval(interval);
 							mVerisService.startDataRetrieval();
 						} catch (RemoteException e) {
 							e.printStackTrace();
@@ -368,7 +371,7 @@ public class DeviceInfoActivity extends Activity {
 		veraNameText.setText(vera.getName());
 		veraLocText.setText(vera.getLocation());
 		veraIpText.setText(vera.getIp());
-		veraIntervalText.setText(String.valueOf(vera.getInterval()));
+		//veraIntervalText.setText(String.valueOf(vera.getInterval()));
 	}
 
 	public void setVerisLayout() {
@@ -382,7 +385,6 @@ public class DeviceInfoActivity extends Activity {
 		verisNameText.setText(veris.getName());
 		verisLocText.setText(veris.getLocation());
 		verisIpText.setText(veris.getIp());
-		verisIntervalText.setText(String.valueOf(veris.getInterval()));
 		verisRegAddrText.setText(String.valueOf(veris.getRegAddr()));
 		verisRegQtyText.setText(String.valueOf(veris.getRegQty()));
 		verisDataEditText = (EditText) findViewById(R.id.edit_veris_data);
@@ -400,7 +402,7 @@ public class DeviceInfoActivity extends Activity {
 		raritanNameText.setText(raritan.getName());
 		raritanLocText.setText(raritan.getLocation());
 		raritanIpText.setText(raritan.getIp());
-		raritanIntervalText.setText(String.valueOf(raritan.getInterval()));
+		//raritanIntervalText.setText(String.valueOf(raritan.getInterval()));
 		raritanUserText.setText(raritan.getUsername());
 		raritanPasswordText.setText(raritan.getPassword());
 

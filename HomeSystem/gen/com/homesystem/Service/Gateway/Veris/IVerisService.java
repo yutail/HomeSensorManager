@@ -49,6 +49,15 @@ this.startDataRetrieval();
 reply.writeNoException();
 return true;
 }
+case TRANSACTION_setInterval:
+{
+data.enforceInterface(DESCRIPTOR);
+int _arg0;
+_arg0 = data.readInt();
+this.setInterval(_arg0);
+reply.writeNoException();
+return true;
+}
 }
 return super.onTransact(code, data, reply, flags);
 }
@@ -81,8 +90,25 @@ _reply.recycle();
 _data.recycle();
 }
 }
+@Override public void setInterval(int i) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeInt(i);
+mRemote.transact(Stub.TRANSACTION_setInterval, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
 }
 static final int TRANSACTION_startDataRetrieval = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
+static final int TRANSACTION_setInterval = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
 }
 public void startDataRetrieval() throws android.os.RemoteException;
+public void setInterval(int i) throws android.os.RemoteException;
 }

@@ -42,7 +42,6 @@ public class VerisDevice extends SensorDevice implements Parcelable {
 		private int modbus_reg_addr;
 
 		//Optional Parameters 
-		private int interval = 10;
 		private int port = 4660;
 		private int modbus_addr = 1;
 		private int modbus_reg_qty = 1;
@@ -54,11 +53,6 @@ public class VerisDevice extends SensorDevice implements Parcelable {
 			this.sensorType = sensorType;
 			this.ip_address = ip;
 			this.modbus_reg_addr = reg_addr;
-		}
-
-		public VerisBuilder setInterval(int val) {
-			this.interval = val;
-			return this;
 		}
 
 		public VerisBuilder setPort(int p) {
@@ -89,7 +83,6 @@ public class VerisDevice extends SensorDevice implements Parcelable {
 	private VerisDevice(VerisBuilder builder) {
 		this.location = builder.location;
 		this.ip_address = builder.ip_address;
-		this.interval = builder.interval;
 		this.name = builder.name;
 		this.port = builder.port;
 		this.sensorType = builder.sensorType;
@@ -143,7 +136,6 @@ public class VerisDevice extends SensorDevice implements Parcelable {
 		dest.writeString(ip_address);
 		dest.writeString(sensorType);
 		dest.writeInt(modbus_reg_addr);
-		dest.writeInt(interval);
 		dest.writeInt(port);
 		dest.writeInt(modbus_addr);
 		dest.writeInt(modbus_reg_qty);
@@ -167,7 +159,6 @@ public class VerisDevice extends SensorDevice implements Parcelable {
 		ip_address = in.readString();
 		sensorType = in.readString();
 		modbus_reg_addr = in.readInt();
-		interval = in.readInt();
 		port = in.readInt();
 		modbus_addr = in.readInt();
 		modbus_reg_qty = in.readInt();

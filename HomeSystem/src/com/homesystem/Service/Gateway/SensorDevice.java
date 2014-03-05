@@ -11,7 +11,6 @@ public abstract class SensorDevice implements Parcelable {
 	protected String sensorType;
 	protected String ip_address;
 	protected int port;
-	protected int interval;
 	
 	public String getId() {
 
@@ -66,16 +65,6 @@ public abstract class SensorDevice implements Parcelable {
 	public int getPort() {
 		
 		return this.port;
-	}
-	
-	public void setInterval(int i) {
-		
-		this.interval = i;
-	}
-	
-	public int getInterval() {
-		
-		return this.interval;
 	}
 	
 	
