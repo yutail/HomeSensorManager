@@ -5,6 +5,5 @@ import com.homesystem.Service.HomeSystem;
 interface ISensorReportService {
 
 	HomeSystem reportHomeSensor();
-
-
+	
 }

@@ -16,6 +16,7 @@ import com.homesystem.Service.Gateway.Vera.VeraSensor.LightLevelSensor;
 import com.homesystem.Service.Gateway.Vera.VeraSensor.MotionSensor;
 import com.homesystem.Service.Gateway.Vera.VeraSensor.TemperatureSensor;
 import com.homesystem.Service.Gateway.Veris.IVerisService;
+import com.homesystem.Service.Gateway.Veris.IVerisServiceCallback;
 import com.homesystem.Service.Gateway.Veris.VerisDevice;
 
 
@@ -480,6 +481,23 @@ public class DeviceInfoActivity extends Activity {
 			mIsVerisBind = false;
 		}
 	}
+	
+	private IVerisServiceCallback mVerisCallback = new IVerisServiceCallback.Stub() {
+
+		@Override
+		public void updateVerisValue(int[] value) throws RemoteException {
+			
+	        Message msg = mHandler.obtainMessage(Constant.VERIS_MESSAGE);
+	        Bundle bundle = new Bundle();
+	        bundle.putIntArray(Constant.VERIS_VALUE, value);			       
+	        msg.setData(bundle);
+	        mHandler.sendMessage(msg);
+			
+			
+			
+		}
+		
+	};
 
 	// Raritan Service Connection
 	private class RaritanConnection implements ServiceConnection {

@@ -81,6 +81,20 @@ public class VerisService extends Service implements DataRetrieval {
 		public void setInterval(int i) throws RemoteException {
 			interval = i;
 		}
+
+		@Override
+		public void registerVerisCallback(IVerisServiceCallback veris_cb)
+				throws RemoteException {
+
+			
+		}
+
+		@Override
+		public void unregisterVerisCallback(IVerisServiceCallback veris_cb)
+				throws RemoteException {
+			
+			
+		}
 	};
 	
 	
@@ -181,11 +195,6 @@ public class VerisService extends Service implements DataRetrieval {
 			
 			while(true) {
 				if (Thread.interrupted()) {
-//					Message msg = mHandler.obtainMessage(Constant.VERIS_MESSAGE);
-//			        Bundle bundle = new Bundle();
-//			        bundle.putIntArray(Constant.VERIS_VALUE, null);			       
-//			        msg.setData(bundle);
-//			        mHandler.sendMessage(msg);
 					return;
 				}
 				
@@ -209,12 +218,6 @@ public class VerisService extends Service implements DataRetrieval {
 					Log.d(TAG, "Total Bytes Received: " + totalBytesRcvd);
 					decodeByteArray(result, rxBuf);
 					Log.d(TAG, "Received Bytes: " + Arrays.toString(result));	
-					// Send the name of the connected device back to the UI Activity
-//			        Message msg = mHandler.obtainMessage(Constant.VERIS_MESSAGE);
-//			        Bundle bundle = new Bundle();
-//			        bundle.putIntArray(Constant.VERIS_VALUE, result);			       
-//			        msg.setData(bundle);
-//			        mHandler.sendMessage(msg);
 					
 					socket.close();
 					Thread.sleep(interval*1000);

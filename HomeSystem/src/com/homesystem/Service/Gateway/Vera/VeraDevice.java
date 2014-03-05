@@ -1,43 +1,14 @@
 package com.homesystem.Service.Gateway.Vera;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicIntegerArray;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.homesystem.Demo.Constant;
 import com.homesystem.Service.Gateway.Vera.VeraSensor.LightLevelSensor;
 import com.homesystem.Service.Gateway.Vera.VeraSensor.MotherSensor;
 import com.homesystem.Service.Gateway.Vera.VeraSensor.MotionSensor;
 import com.homesystem.Service.Gateway.Vera.VeraSensor.TemperatureSensor;
-import com.homesystem.Service.Gateway.DataRetrieval;
 import com.homesystem.Service.Gateway.SensorDevice;
 
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -74,7 +45,6 @@ public class VeraDevice extends SensorDevice implements Parcelable {
 		private String ip_address;
 		
 		// Optional Parameters
-		private int interval = 10;
 		private int port = 3480;
 		
 		public VeraBuilder(String loc, String name, String sensorType, String ip) {	
