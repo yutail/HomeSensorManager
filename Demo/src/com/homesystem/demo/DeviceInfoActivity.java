@@ -222,7 +222,7 @@ public class DeviceInfoActivity extends Activity {
 						boolean isChecked) {
 
 					if (isChecked) {
-						veraSensorValue3.setText("No Motion");
+						//veraSensorValue3.setText("No Motion");
 					} else {
 						veraSensorValue3.setText("");
 					}					
