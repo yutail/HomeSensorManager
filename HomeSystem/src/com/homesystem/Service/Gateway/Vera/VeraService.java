@@ -210,13 +210,13 @@ public class VeraService extends Service implements DataRetrieval {
 		public void run() {
 			while (true) {
 				if (Thread.interrupted()) {
-					Message msg = mHandler.obtainMessage(Constant.VERA_MESSAGE);
-			        Bundle bundle = new Bundle();
-			        bundle.putString(Constant.VERA_VALUE, "");
-			        bundle.putInt(Constant.VERA_ID, tid);
-			        bundle.putString(Constant.VERA_SUBTYPE, tag);
-			        msg.setData(bundle);
-			        mHandler.sendMessage(msg);
+//					Message msg = mHandler.obtainMessage(Constant.VERA_MESSAGE);
+//			        Bundle bundle = new Bundle();
+//			        bundle.putString(Constant.VERA_VALUE, "");
+//			        bundle.putInt(Constant.VERA_ID, tid);
+//			        bundle.putString(Constant.VERA_SUBTYPE, tag);
+//			        msg.setData(bundle);
+//			        mHandler.sendMessage(msg);
 					return;
 				}
 				try {	
@@ -237,13 +237,13 @@ public class VeraService extends Service implements DataRetrieval {
 					Log.d(TAG, "Received Data: " + tag + ": " + result);
 					
 					// Send the name of the connected device back to the UI Activity
-			        Message msg = mHandler.obtainMessage(Constant.VERA_MESSAGE);
-			        Bundle bundle = new Bundle();
-			        bundle.putString(Constant.VERA_VALUE, result);
-			        bundle.putInt(Constant.VERA_ID, tid);
-			        bundle.putString(Constant.VERA_SUBTYPE, tag);
-			        msg.setData(bundle);
-			        mHandler.sendMessage(msg);
+//			        Message msg = mHandler.obtainMessage(Constant.VERA_MESSAGE);
+//			        Bundle bundle = new Bundle();
+//			        bundle.putString(Constant.VERA_VALUE, result);
+//			        bundle.putInt(Constant.VERA_ID, tid);
+//			        bundle.putString(Constant.VERA_SUBTYPE, tag);
+//			        msg.setData(bundle);
+//			        mHandler.sendMessage(msg);
 					
 					if(tag.equals("light")) {
 						((LightLevelSensor) mSensor).setLightLevel(Float.parseFloat(result));
@@ -275,6 +275,4 @@ public class VeraService extends Service implements DataRetrieval {
 		}				
 	}	
 	
-	
-
 }

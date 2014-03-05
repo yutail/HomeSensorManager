@@ -37,7 +37,7 @@ public class SensorReportService extends Service {
 	private static final String TAG = "SensorReportService";
 	
 	private HomeSystem myHomeSystem;
-	private HashMap<String, SensorDevice> sensorByName;
+	private HashMap<String, SensorDevice> sensorByName = null;
 	
 	// Handling Threads
 	private ExecutorService threadPool = Executors.newCachedThreadPool();	
@@ -166,7 +166,7 @@ public class SensorReportService extends Service {
 		
 		try {
 			int size = VeraSensorQueue.mSensorSize.take();
-			Log.d(TAG, "Sensor Qty: " + size);
+			Log.d(TAG, "Number of Sensors: " + size);
 			for (int i=0; i<size; i++) {
 				MotherSensor mSensor = VeraSensorQueue.mSensorQueue.take();
 				if (mSensor instanceof TemperatureSensor)

@@ -255,6 +255,8 @@ public class DeviceInfoActivity extends Activity {
 			// Bind to Raritan Service
 			if (mIsRaritanBind == false)
 				doBindRaritanService();
+			
+			Log.d(TAG, "Raritan Sensor Type: " + raritan.getSensorType());
 
 			raritanVoltageCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override
@@ -263,17 +265,18 @@ public class DeviceInfoActivity extends Activity {
 					if (isChecked) {
 						raritan.setChannel(Constant.RARITAN_VOLTAGE);
 						int id = Integer.parseInt(raritanVoltageEdit.getText().toString());
-						
+						try {
+							mRaritanService.startDataRetrieval(id);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}						
 						
 					} else {
 						doUnbindRaritanService();
-						raritanVoltageValue.setText("");
-						
+						raritanVoltageValue.setText("");	
 					}	
 				}	
-			});
-
-			Log.d(TAG, "Raritan Sensor Type: " + raritan.getSensorType());
+			});			
 
 			raritanActivePowerCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override
@@ -283,11 +286,15 @@ public class DeviceInfoActivity extends Activity {
 
 						raritan.setChannel(Constant.RARITAN_ACTIVE_POWER);
 						int id = Integer.parseInt(raritanActivePowerEdit.getText().toString());
-						
+						try {
+							mRaritanService.startDataRetrieval(id);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
 
 					} else {
 						doUnbindRaritanService();
-
+						raritanActivePowerValue.setText("");
 					}	
 				}	
 			});
@@ -297,17 +304,18 @@ public class DeviceInfoActivity extends Activity {
 				public void onCheckedChanged(CompoundButton buttonView,
 						boolean isChecked) {
 					if (isChecked) {
-						if(mIsRaritanBind)
-							doUnbindRaritanService();
 
 						raritan.setChannel(Constant.RARITAN_CURRENT);
 						int id = Integer.parseInt(raritanCurrentEdit.getText().toString());
-						
-				
+						try {
+							mRaritanService.startDataRetrieval(id);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}				
 
 					} else {
 						doUnbindRaritanService();
-
+						raritanCurrentValue.setText("");
 					}	
 				}	
 			});
@@ -541,7 +549,6 @@ public class DeviceInfoActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.demo, menu);
 		return true;
 	}
