@@ -51,8 +51,6 @@ public class VeraService extends Service implements DataRetrieval {
 	private HashMap<Integer, MotionSensor> mMotionMap = null;
 	private HashMap<Integer, TemperatureSensor> mTemperatureMap = null;
 	private String devName;
-	private int devId;
-	private int idLight;
 	
 	// Sampling Interval
 	private int interval = 10;
@@ -91,7 +89,6 @@ public class VeraService extends Service implements DataRetrieval {
 	@Override
 	public IBinder onBind(Intent intent) {
 		Log.d(TAG, "VeraService onBind");
-		devId = intent.getIntExtra(Constant.EXTRA_DEVICE_ID, -1);
 		devName = intent.getStringExtra(Constant.EXTRA_DEVICE_NAME);
 		vera = (VeraDevice) devByName.get(devName);
 		mControllerMap = vera.getMotherSensor();
@@ -105,6 +102,10 @@ public class VeraService extends Service implements DataRetrieval {
 		@Override
 		public void startDataRetrieval(int id) throws RemoteException {
 			subscribeToSensor(id);
+		}
+		
+		public void stopDataRetrieval(int id) throws RemoteException {
+			unsubscribeFromSensor(id);
 		}
 		
 		public void setInterval(int i) throws RemoteException {
@@ -173,8 +174,6 @@ public class VeraService extends Service implements DataRetrieval {
 	public void onDestroy() {  
         super.onDestroy(); 
         Log.d(TAG, "VeraService onDestroy");
-        unsubscribeFromSensor(devId);
-        unsubscribeFromSensor(idLight);
         
 	}
 

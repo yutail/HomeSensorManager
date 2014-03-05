@@ -117,7 +117,6 @@ public class DeviceInfoActivity extends Activity {
 	private static final String VERIS_VALUE = "veris_value";
 	private static final String RARITAN_VALUE = "raritan_value";
 	private static final String RARITAN_CHANNEL = "raritan_channel";
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -179,8 +178,9 @@ public class DeviceInfoActivity extends Activity {
 
 					if (isChecked) {
 						Log.d(TAG, "Temp Service Started: " + idTem);
+						int interval =Integer.parseInt(veraIntervalText.getText().toString());
 						try {
-							mVeraService.setInterval(10);
+							mVeraService.setInterval(interval);
 							mVeraService.startDataRetrieval(idTem);
 						} catch (RemoteException e) {
 							
@@ -188,7 +188,11 @@ public class DeviceInfoActivity extends Activity {
 						}
 
 					} else {
-						
+						try {
+							mVeraService.stopDataRetrieval(idTem);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
 						veraSensorValue1.setText("");
 						Log.d(TAG, "Temp Service Stopped");
 					}	
@@ -201,14 +205,21 @@ public class DeviceInfoActivity extends Activity {
 						boolean isChecked) {
 
 					if (isChecked) {
+						int interval =Integer.parseInt(veraIntervalText.getText().toString());
 						Log.d(TAG, "Light Service Started: " + idLight);
 						try {
+							mVeraService.setInterval(interval);
 							mVeraService.startDataRetrieval(idLight);
 						} catch (RemoteException e) {
 							e.printStackTrace();
 						}
 						
 					} else {
+						try {
+							mVeraService.stopDataRetrieval(idLight);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
 						
 						Log.d(TAG, "Light Service Stopped");
 						veraSensorValue2.setText("");
@@ -222,6 +233,12 @@ public class DeviceInfoActivity extends Activity {
 						boolean isChecked) {
 
 					if (isChecked) {
+						int interval =Integer.parseInt(veraIntervalText.getText().toString());
+						try {
+							mVeraService.setInterval(interval);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
 						//veraSensorValue3.setText("No Motion");
 					} else {
 						veraSensorValue3.setText("");
@@ -294,7 +311,7 @@ public class DeviceInfoActivity extends Activity {
 						}						
 						
 					} else {
-						doUnbindRaritanService();
+						
 						raritanVoltageValue.setText("");	
 					}	
 				}	
@@ -315,7 +332,7 @@ public class DeviceInfoActivity extends Activity {
 						}
 
 					} else {
-						doUnbindRaritanService();
+						
 						raritanActivePowerValue.setText("");
 					}	
 				}	
@@ -336,7 +353,7 @@ public class DeviceInfoActivity extends Activity {
 						}				
 
 					} else {
-						doUnbindRaritanService();
+						
 						raritanCurrentValue.setText("");
 					}	
 				}	
@@ -390,7 +407,6 @@ public class DeviceInfoActivity extends Activity {
 		veraNameText.setText(vera.getName());
 		veraLocText.setText(vera.getLocation());
 		veraIpText.setText(vera.getIp());
-		//veraIntervalText.setText(String.valueOf(vera.getInterval()));
 	}
 
 	public void setVerisLayout() {
@@ -421,7 +437,6 @@ public class DeviceInfoActivity extends Activity {
 		raritanNameText.setText(raritan.getName());
 		raritanLocText.setText(raritan.getLocation());
 		raritanIpText.setText(raritan.getIp());
-		//raritanIntervalText.setText(String.valueOf(raritan.getInterval()));
 		raritanUserText.setText(raritan.getUsername());
 		raritanPasswordText.setText(raritan.getPassword());
 

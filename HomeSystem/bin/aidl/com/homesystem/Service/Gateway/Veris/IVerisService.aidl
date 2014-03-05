@@ -6,6 +6,8 @@ interface IVerisService {
 
 	void startDataRetrieval();
 	
+	void stopDataRetrieval();
+	
 	void setInterval(in int i);
 	
 	void registerVerisCallback(IVerisServiceCallback veris_cb);

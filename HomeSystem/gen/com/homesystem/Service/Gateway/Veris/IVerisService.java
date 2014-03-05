@@ -49,6 +49,13 @@ this.startDataRetrieval();
 reply.writeNoException();
 return true;
 }
+case TRANSACTION_stopDataRetrieval:
+{
+data.enforceInterface(DESCRIPTOR);
+this.stopDataRetrieval();
+reply.writeNoException();
+return true;
+}
 case TRANSACTION_setInterval:
 {
 data.enforceInterface(DESCRIPTOR);
@@ -108,6 +115,20 @@ _reply.recycle();
 _data.recycle();
 }
 }
+@Override public void stopDataRetrieval() throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+mRemote.transact(Stub.TRANSACTION_stopDataRetrieval, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
 @Override public void setInterval(int i) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
@@ -155,11 +176,13 @@ _data.recycle();
 }
 }
 static final int TRANSACTION_startDataRetrieval = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
-static final int TRANSACTION_setInterval = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
-static final int TRANSACTION_registerVerisCallback = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
-static final int TRANSACTION_unregisterVerisCallback = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
+static final int TRANSACTION_stopDataRetrieval = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
+static final int TRANSACTION_setInterval = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
+static final int TRANSACTION_registerVerisCallback = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
+static final int TRANSACTION_unregisterVerisCallback = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
 }
 public void startDataRetrieval() throws android.os.RemoteException;
+public void stopDataRetrieval() throws android.os.RemoteException;
 public void setInterval(int i) throws android.os.RemoteException;
 public void registerVerisCallback(com.homesystem.Service.Gateway.Veris.IVerisServiceCallback veris_cb) throws android.os.RemoteException;
 public void unregisterVerisCallback(com.homesystem.Service.Gateway.Veris.IVerisServiceCallback veris_cb) throws android.os.RemoteException;

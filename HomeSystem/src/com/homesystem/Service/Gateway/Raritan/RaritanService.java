@@ -89,6 +89,10 @@ public class RaritanService extends Service implements DataRetrieval {
 			subscribeToSensor(id);	
 		}
 		
+		public void stopDataRetrieval(int id) throws RemoteException {
+			unsubscribeFromSensor(id);
+		}
+		
 		public void setInterval(int i) throws RemoteException {
 			interval = i;
 		}

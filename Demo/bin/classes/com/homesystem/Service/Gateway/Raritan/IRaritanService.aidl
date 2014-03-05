@@ -6,6 +6,8 @@ interface IRaritanService {
 
 	void startDataRetrieval(in int id);
 	
+	void stopDataRetrieval(in int id);
+	
 	void setInterval(in int i);
 	
 	void registerRaritanCallback(IRaritanServiceCallback raritan_cb);

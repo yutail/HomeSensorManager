@@ -52,10 +52,10 @@ public class SensorReportService extends Service {
 		@Override
 		public HomeSystem reportHomeSensor() throws RemoteException {
 			
-//			VeraDevice vera = new VeraDevice.VeraBuilder("nesl", "vera1", "Vera 2", "172.17.5.117").
-//					setPort(3480).build();
-//			getVeraDeviceInfo(vera);			
-//			myHomeSystem.addDevicesByName("vera1", vera);
+			VeraDevice vera = new VeraDevice.VeraBuilder("nesl", "vera1", "Vera 2", "172.17.5.117").
+					setPort(3480).build();
+			getVeraDeviceInfo(vera);			
+			myHomeSystem.addDevicesByName("vera1", vera);
 			
 			VerisDevice veris = new VerisDevice.VerisBuilder("nesl", "veris1", "Veris E30", 
 					"128.97.93.90", 2251).setPort(4660).
