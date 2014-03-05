@@ -18,8 +18,11 @@ import com.homesystem.Service.Gateway.SensorDevice;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -33,15 +36,18 @@ public class VerisService extends Service implements DataRetrieval {
 	private VerisDevice veris = null;
 	private String devName;
 
-	
 	// Handling Threads
 	private ExecutorService threadPool = Executors.newCachedThreadPool();
 	private boolean interruptFlag = false;
 	
-	// Handler
-	private Handler mHandler;
+	private RemoteCallbackList<IVerisServiceCallback> mVerisCallbackList =
+			new RemoteCallbackList<IVerisServiceCallback>();
+	
 	// Sampling interval 
-	int interval = 10;
+	private int interval = 10;
+	
+	private static final int REPORT_MSG = 1;
+	private static final String VERIS_VALUE = "veris_value";
 	
 	public void setInterval(int i) {	
 		this.interval = i;
@@ -57,10 +63,6 @@ public class VerisService extends Service implements DataRetrieval {
 	
 	public synchronized boolean getFlag() {
 		return interruptFlag;
-	}
-	
-	public void setHandler(Handler handler) {
-		this.mHandler = handler;
 	}
 
 	@Override
@@ -85,16 +87,31 @@ public class VerisService extends Service implements DataRetrieval {
 		@Override
 		public void registerVerisCallback(IVerisServiceCallback veris_cb)
 				throws RemoteException {
-
-			
+			if (veris_cb != null)
+				mVerisCallbackList.register(veris_cb);	
 		}
 
 		@Override
 		public void unregisterVerisCallback(IVerisServiceCallback veris_cb)
 				throws RemoteException {
+			if (veris_cb != null)
+				mVerisCallbackList.unregister(veris_cb);			
+		}
+	};
+	
+	// Handler
+	private final Handler mHandler = new Handler() {
+		@Override public void handleMessage(Message msg) {
+			
+			switch(msg.what) {
+			
+			
+			
+			}
 			
 			
 		}
+		
 	};
 	
 	
@@ -217,7 +234,13 @@ public class VerisService extends Service implements DataRetrieval {
 					
 					Log.d(TAG, "Total Bytes Received: " + totalBytesRcvd);
 					decodeByteArray(result, rxBuf);
-					Log.d(TAG, "Received Bytes: " + Arrays.toString(result));	
+					Log.d(TAG, "Received Bytes: " + Arrays.toString(result));
+					
+			        Message msg = mHandler.obtainMessage(REPORT_MSG);
+			        Bundle bundle = new Bundle();
+			        bundle.putIntArray(VERIS_VALUE, result);			       
+			        msg.setData(bundle);
+			        mHandler.sendMessage(msg);	
 					
 					socket.close();
 					Thread.sleep(interval*1000);

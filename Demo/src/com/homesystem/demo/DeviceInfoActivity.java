@@ -243,6 +243,11 @@ public class DeviceInfoActivity extends Activity {
 
 					} else {
 						doUnbindVerisService();
+						try {
+							mVerisService.unregisterVerisCallback(mVerisCallback);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
 						verisDataEditText.setText("");
 					}					
 				}				
@@ -455,6 +460,11 @@ public class DeviceInfoActivity extends Activity {
 		@Override
 		public void onServiceConnected(ComponentName className, IBinder service) {
 			mVerisService = IVerisService.Stub.asInterface(service);
+			try {
+				mVerisService.registerVerisCallback(mVerisCallback);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
 			Log.d(TAG, "Remote Veris Service Connected");
 		}
 
@@ -486,17 +496,13 @@ public class DeviceInfoActivity extends Activity {
 
 		@Override
 		public void updateVerisValue(int[] value) throws RemoteException {
-			
 	        Message msg = mHandler.obtainMessage(Constant.VERIS_MESSAGE);
 	        Bundle bundle = new Bundle();
 	        bundle.putIntArray(Constant.VERIS_VALUE, value);			       
 	        msg.setData(bundle);
-	        mHandler.sendMessage(msg);
-			
-			
+	        mHandler.sendMessage(msg);	
 			
 		}
-		
 	};
 
 	// Raritan Service Connection
