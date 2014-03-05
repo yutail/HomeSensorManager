@@ -8,6 +8,8 @@ import com.homesystem.Service.Constant;
 import com.homesystem.Service.HomeSystem;
 import com.homesystem.Service.ISensorReportService;
 import com.homesystem.Service.Gateway.SensorDevice;
+import com.homesystem.Service.Gateway.Raritan.IRaritanService;
+import com.homesystem.Service.Gateway.Raritan.RaritanDevice;
 import com.homesystem.Service.Gateway.Vera.IVeraService;
 import com.homesystem.Service.Gateway.Vera.VeraDevice;
 import com.homesystem.Service.Gateway.Vera.VeraSensor.LightLevelSensor;
@@ -85,7 +87,7 @@ public class DeviceInfoActivity extends Activity {
 	private String deviceType = null;
 	private VeraDevice vera = null;
 	private VerisDevice veris = null;
-	//		private RaritanDevice raritan = null;
+	private RaritanDevice raritan = null;
 	private int idTem;
 	private int idLight;
 	private int idMotion;
@@ -98,8 +100,8 @@ public class DeviceInfoActivity extends Activity {
 	private IVerisService mVerisService = null;
 	private VerisConnection mVerisConnection;
 	private boolean mIsVerisBind = false;
-	//		private IRaritanService mRaritanService = null;
-	//		private RaritanConnection mRaritanConnection;
+	private IRaritanService mRaritanService = null;
+	private RaritanConnection mRaritanConnection;
 	private boolean mIsRaritanBind = false;
 
 	@Override
@@ -237,72 +239,71 @@ public class DeviceInfoActivity extends Activity {
 		}
 		// Raritan Device 
 		else if (deviceType.equals(Constant.RARITAN_NAME)) {
-			//				raritan = (RaritanDevice) devByName.get(devName);
-			//				raritan.setHandler(mHandler);
-			//				setRaritanLayout();
-			//				
-			//				raritanVoltageCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			//					@Override
-			//					public void onCheckedChanged(CompoundButton buttonView,
-			//							boolean isChecked) {
-			//						if (isChecked) {
-			//							if(mIsRaritanBind)
-			//								doUnbindRaritanService();
-			//							
-			//							raritan.setChannel(Constant.RARITAN_VOLTAGE);
-			//							int id = Integer.parseInt(raritanVoltageEdit.getText().toString());
-			//							myHomeSystem.addDevicesByName(devName, raritan);
-			//							doBindRaritanService(id);
-			//							//startRaritanService(id);
-			//						} else {
-			//							doUnbindRaritanService();
-			//							raritanVoltageValue.setText("");
-			//							//stopRaritanService();
-			//						}	
-			//					}	
-			//				});
-			//				
-			//				Log.d(TAG, "Raritan Sensor Type: " + raritan.getSensorType());
-			//				
-			//				raritanActivePowerCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			//					@Override
-			//					public void onCheckedChanged(CompoundButton buttonView,
-			//							boolean isChecked) {
-			//						if (isChecked) {
-			//							if(mIsRaritanBind)
-			//								doUnbindRaritanService();
-			//							
-			//							raritan.setChannel(Constant.RARITAN_ACTIVE_POWER);
-			//							int id = Integer.parseInt(raritanActivePowerEdit.getText().toString());
-			//							myHomeSystem.addDevicesByName(devName, raritan);
-			//							doBindRaritanService(id);
-			//				
-			//						} else {
-			//							doUnbindRaritanService();
-			//							
-			//						}	
-			//					}	
-			//				});
-			//				
-			//				raritanCurrentCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			//					@Override
-			//					public void onCheckedChanged(CompoundButton buttonView,
-			//							boolean isChecked) {
-			//						if (isChecked) {
-			//							if(mIsRaritanBind)
-			//								doUnbindRaritanService();
-			//							
-			//							raritan.setChannel(Constant.RARITAN_CURRENT);
-			//							int id = Integer.parseInt(raritanCurrentEdit.getText().toString());
-			//							myHomeSystem.addDevicesByName(devName, raritan);
-			//							doBindRaritanService(id);
-			//							
-			//						} else {
-			//							doUnbindRaritanService();
-			//							
-			//						}	
-			//					}	
-			//				});
+			raritan = (RaritanDevice) devByName.get(devName);
+			setRaritanLayout();
+
+			raritanVoltageCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+					if (isChecked) {
+						if(mIsRaritanBind)
+							doUnbindRaritanService();
+
+						raritan.setChannel(Constant.RARITAN_VOLTAGE);
+						int id = Integer.parseInt(raritanVoltageEdit.getText().toString());
+						myHomeSystem.addDevicesByName(devName, raritan);
+						doBindRaritanService(id);
+						
+					} else {
+						doUnbindRaritanService();
+						raritanVoltageValue.setText("");
+						
+					}	
+				}	
+			});
+
+			Log.d(TAG, "Raritan Sensor Type: " + raritan.getSensorType());
+
+			raritanActivePowerCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+					if (isChecked) {
+						if(mIsRaritanBind)
+							doUnbindRaritanService();
+
+						raritan.setChannel(Constant.RARITAN_ACTIVE_POWER);
+						int id = Integer.parseInt(raritanActivePowerEdit.getText().toString());
+						myHomeSystem.addDevicesByName(devName, raritan);
+						doBindRaritanService(id);
+
+					} else {
+						doUnbindRaritanService();
+
+					}	
+				}	
+			});
+
+			raritanCurrentCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+					if (isChecked) {
+						if(mIsRaritanBind)
+							doUnbindRaritanService();
+
+						raritan.setChannel(Constant.RARITAN_CURRENT);
+						int id = Integer.parseInt(raritanCurrentEdit.getText().toString());
+						myHomeSystem.addDevicesByName(devName, raritan);
+						doBindRaritanService(id);
+
+					} else {
+						doUnbindRaritanService();
+
+					}	
+				}	
+			});
 		}
 	}
 
@@ -381,12 +382,12 @@ public class DeviceInfoActivity extends Activity {
 		raritanIntervalText = (EditText) findViewById(R.id.edit_raritan_interval);
 		raritanUserText = (EditText) findViewById(R.id.edit_raritan_usr);
 		raritanPasswordText = (EditText) findViewById(R.id.edit_raritan_password);
-		//			raritanNameText.setText(raritan.getName());
-		//			raritanLocText.setText(raritan.getLocation());
-		//			raritanIpText.setText(raritan.getIp());
-		//			raritanIntervalText.setText(String.valueOf(raritan.getInterval()));
-		//			raritanUserText.setText(raritan.getUsername());
-		//			raritanPasswordText.setText(raritan.getPassword());
+		raritanNameText.setText(raritan.getName());
+		raritanLocText.setText(raritan.getLocation());
+		raritanIpText.setText(raritan.getIp());
+		raritanIntervalText.setText(String.valueOf(raritan.getInterval()));
+		raritanUserText.setText(raritan.getUsername());
+		raritanPasswordText.setText(raritan.getPassword());
 
 		raritanVoltageCheckBox = (CheckBox) findViewById(R.id.check_raritan_voltage);;
 		raritanActivePowerCheckBox = (CheckBox) findViewById(R.id.check_raritan_active_power);
@@ -399,7 +400,7 @@ public class DeviceInfoActivity extends Activity {
 		raritanCurrentValue = (TextView) findViewById(R.id.raritan_current_text);	
 	}
 
-
+	// Vera Service Connection
 	private class VeraConnection implements ServiceConnection {
 		@Override
 		public void onServiceConnected(ComponentName className, IBinder service) {
@@ -417,7 +418,7 @@ public class DeviceInfoActivity extends Activity {
 	public void doBindVeraService(int id) {
 		Log.d(TAG, "Bind Vera Service");
 		mVeraConnection = new VeraConnection();
-		Intent veraRetrievalIntent = new Intent("");
+		Intent veraRetrievalIntent = new Intent("com.homesystem.Service.Gateway.Vera.IVeraService");
 		veraRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_NAME, devName);
 		veraRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_ID, id);
 		bindService(veraRetrievalIntent, mVeraConnection, Context.BIND_AUTO_CREATE);	
@@ -431,7 +432,8 @@ public class DeviceInfoActivity extends Activity {
 			mIsVeraBind = false;
 		}
 	}
-
+	
+	// Veris Service Connection
 	private class VerisConnection implements ServiceConnection {
 		@Override
 		public void onServiceConnected(ComponentName className, IBinder service) {
@@ -463,42 +465,38 @@ public class DeviceInfoActivity extends Activity {
 		}
 	}
 
-	//		private class RaritanConnection implements ServiceConnection {
-	//			@Override
-	//		    public void onServiceConnected(ComponentName className, IBinder service) {
-	//				mRaritanService = ((RaritanService.RaritanBinder)service).getService();
-	//		        Log.d(TAG, "Raritan Service Connected");
-	//		    }
-	//
-	//			@Override
-	//		    public void onServiceDisconnected(ComponentName className) {
-	//		        mRaritanService = null;
-	//		        Log.d(TAG, "Raritan Serivce Disconnected");
-	//		    }	
-	//		}
-	//		
-	//		public void doBindRaritanService(int id) {
-	//			Log.d(TAG, "Bind Raritan Service");
-	//			if (mIsRaritanBind == false) {
-	//				mRaritanConnection = new RaritanConnection();
-	//				Intent raritanRetrievalIntent = new Intent(getApplicationContext(), RaritanService.class);
-	//				raritanRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_NAME, devName);
-	//				raritanRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_ID, id);
-	//				bindService(raritanRetrievalIntent, mRaritanConnection, Context.BIND_AUTO_CREATE);	
-	//				mIsRaritanBind = true;
-	//			} else {
-	//				mRaritanService.startDataRetrieval(id);
-	//			}
-	//		}
-	//		
-	//		public void doUnbindRaritanService() {
-	//			if (mIsRaritanBind) {
-	//				Log.d(TAG, "Unbind Raritan Service");
-	//				unbindService(mRaritanConnection);
-	//				mIsRaritanBind = false;
-	//			}
-	//		}
+	// Raritan Service Connection
+	private class RaritanConnection implements ServiceConnection {
+		@Override
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			mRaritanService = IRaritanService.Stub.asInterface(service);
+			Log.d(TAG, "Remote Raritan Service Connected");
+		}
 
+		@Override
+		public void onServiceDisconnected(ComponentName className) {
+			mRaritanService = null;
+			Log.d(TAG, "Remote Raritan Serivce Disconnected");
+		}	
+	}
+
+	public void doBindRaritanService(int id) {
+		Log.d(TAG, "Bind Raritan Service");
+		mRaritanConnection = new RaritanConnection();
+		Intent raritanRetrievalIntent = new Intent("com.homesystem.Service.Gateway.Raritan.IRaritanService");
+		raritanRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_NAME, devName);
+		raritanRetrievalIntent.putExtra(Constant.EXTRA_DEVICE_ID, id);
+		bindService(raritanRetrievalIntent, mRaritanConnection, Context.BIND_AUTO_CREATE);	
+		mIsRaritanBind = true;
+	}
+
+	public void doUnbindRaritanService() {
+		if (mIsRaritanBind) {
+			Log.d(TAG, "Unbind Raritan Service");
+			unbindService(mRaritanConnection);
+			mIsRaritanBind = false;
+		}
+	}
 
 	// The Handler that gets information back from the Worker Thread
 	private final Handler mHandler = new Handler() {

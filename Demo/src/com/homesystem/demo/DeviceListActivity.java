@@ -7,6 +7,7 @@ import com.homesystem.Service.Constant;
 import com.homesystem.Service.HomeSystem;
 import com.homesystem.Service.ISensorReportService;
 import com.homesystem.Service.Gateway.SensorDevice;
+import com.homesystem.Service.Gateway.Raritan.RaritanDevice;
 import com.homesystem.Service.Gateway.Vera.VeraDevice;
 import com.homesystem.Service.Gateway.Veris.VerisDevice;
 
@@ -139,8 +140,11 @@ public class DeviceListActivity extends Activity {
 				deviceInfoIntent.putExtra(Constant.EXTRA_DEVICE_TYPE, Constant.VERA_NAME);
 				deviceInfoIntent.putExtra(Constant.EXTRA_DEVICE_NAME, sensorName);
 				
+			} else if (device instanceof RaritanDevice) {
+				Log.d(TAG, "Raritan Device");
+				deviceInfoIntent.putExtra(Constant.EXTRA_DEVICE_TYPE, Constant.RARITAN_NAME);
+				deviceInfoIntent.putExtra(Constant.EXTRA_DEVICE_NAME, sensorName);
 			}
-			
 			startActivity(deviceInfoIntent);
 		}	
     }

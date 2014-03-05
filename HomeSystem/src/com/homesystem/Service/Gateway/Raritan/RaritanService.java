@@ -30,6 +30,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
@@ -52,7 +53,8 @@ public class RaritanService extends Service implements DataRetrieval {
 	private boolean interruptFlag[] = new boolean[CHANNEL_NUM];
 	private Object lock_interruptFlag = new Object();
 	
-	
+	// Handling Message
+	private Handler mHandler;	
 	
 	public synchronized void setInterruptFlag(boolean flag, int id) {
 		this.interruptFlag[id] = flag;
@@ -61,7 +63,10 @@ public class RaritanService extends Service implements DataRetrieval {
 	public synchronized boolean getInterruptFlag(int id) {
 		return interruptFlag[id];
 	}
-
+	
+	public void setHandler(Handler handler) {
+		this.mHandler = handler;
+	}
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -69,14 +74,13 @@ public class RaritanService extends Service implements DataRetrieval {
 		outletNum = intent.getIntExtra(Constant.EXTRA_DEVICE_ID, -1);
 		devName = intent.getStringExtra(Constant.EXTRA_DEVICE_NAME);
 		raritan = (RaritanDevice) devByName.get(devName);
-		raritan.subscribeToSensor(outletNum);
 		return mBinder;
 	}
 	
 	private final IRaritanService.Stub mBinder = new IRaritanService.Stub() {
 		@Override
 		public void startDataRetrieval(int id) throws RemoteException {
-			raritan.subscribeToSensor(id);
+			subscribeToSensor(id);
 			
 		}
 	};
@@ -93,23 +97,25 @@ public class RaritanService extends Service implements DataRetrieval {
 	public void onDestroy() {  
         super.onDestroy(); 
         Log.d(TAG, "RaritanService onDestroy");
-        raritan.unsubscribeFromSensor(outletNum);
-        
+        unsubscribeFromSensor(outletNum);   
 	}
 
 	@Override
 	public void subscribeToSensor(int... id) {
-		 
 		
+		setInterruptFlag(false, id[0]);
+		threadPool.execute(new RaritanSNMPManager(raritan.getIp(),
+				raritan.getPort(), id[0], 
+				raritan.getPassword(), raritan.getChannel(),
+				raritan.getInterval()));		 	
 	}
 
 	@Override
 	public void unsubscribeFromSensor(int... id) {
-		
-		
+		setInterruptFlag(true, id[0]);		
 	}
 	
-private class RaritanSNMPManager implements Runnable {
+	private class RaritanSNMPManager implements Runnable {
 		
 		private String client_address = null;
 		private String client_password = null;

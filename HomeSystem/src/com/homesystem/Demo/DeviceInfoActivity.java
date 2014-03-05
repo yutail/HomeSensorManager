@@ -120,8 +120,6 @@ public class DeviceInfoActivity extends Activity {
 			setVeraLayout();
 			Log.d(TAG, "Vera Sensor Type: " + vera.getSensorType());
 			
-			
-			//vera.setHandler(mHandler);
 			myHomeSystem.addDevicesByName(devName, vera);
 			
 			veraSensorCheckBox1.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -174,7 +172,6 @@ public class DeviceInfoActivity extends Activity {
 		// Veris Device
 		else if (deviceType.equals(Constant.VERIS_NAME)) {
 			veris = (VerisDevice) devByName.get(devName);
-			//veris.setHandler(mHandler);
 			setVerisLayout();
 			
 			if (mIsVerisBind == false)
@@ -208,7 +205,6 @@ public class DeviceInfoActivity extends Activity {
 		// Raritan Device 
 		else if (deviceType.equals(Constant.RARITAN_NAME)) {
 			raritan = (RaritanDevice) devByName.get(devName);
-			raritan.setHandler(mHandler);
 			setRaritanLayout();
 			
 			raritanVoltageCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {

@@ -66,9 +66,9 @@ public class VeraService extends Service implements DataRetrieval {
 	private String request[] = {"user_data", "status", "sdata"};
 	private String format = "output_format=json";	
 	
-	public void setInterruptFlag(boolean flag, int[] id) {
+	public void setInterruptFlag(boolean flag, int id) {
 		synchronized(lock_interruptFlag) {
-			this.interruptFlag[id[0]] = flag;
+			this.interruptFlag[id] = flag;
 		}
 	}
 	
@@ -133,7 +133,7 @@ public class VeraService extends Service implements DataRetrieval {
 		Log.d(TAG, "Subscribe to Vera Sensor");
 		String targetURL = generateURL(request[2], format, vera);
 		try {
-			setInterruptFlag(false, id);
+			setInterruptFlag(false, id[0]);
 			threadPool.execute(new HttpClient(id[0], targetURL, vera.getInterval()));
 			
 		} catch (MalformedURLException e) {
@@ -146,7 +146,7 @@ public class VeraService extends Service implements DataRetrieval {
 	@Override
 	public void unsubscribeFromSensor(int... id) {
 		Log.d(TAG, "Unsubscribe from Vera Sensor");
-		setInterruptFlag(true, id);	
+		setInterruptFlag(true, id[0]);	
 	}
 	
 	public String generateURL(String r, String f, VeraDevice vera) {
