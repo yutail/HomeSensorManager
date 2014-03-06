@@ -40,7 +40,7 @@ public class SensorReportService extends Service {
 	private HomeSystem myHomeSystem;
 	private HashMap<String, SensorDevice> sensorByName = null;
 	
-	private String vera_url = null;
+	private String vera_ip = null;
 	
 	// Handling Threads
 	private ExecutorService threadPool = Executors.newCachedThreadPool();	
@@ -61,8 +61,7 @@ public class SensorReportService extends Service {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			VeraDevice vera = registerVeraDevice(vera_in);
-			//getVeraDeviceInfo(vera);			
+			VeraDevice vera = registerVeraDevice(vera_in);		
 			myHomeSystem.addDevicesByName("vera1", vera);
 			
 			InputStream veris_in = null;
@@ -105,6 +104,7 @@ public class SensorReportService extends Service {
 			loc = vera_json.getString("location");
 			type = vera_json.getString("type");
 			ip = vera_json.getString("ip");
+			vera_ip = ip;
 			port = Integer.parseInt(vera_json.getString("port"));	
 
 		} catch (IOException e) {
@@ -116,6 +116,8 @@ public class SensorReportService extends Service {
 		
 		VeraDevice v = new VeraDevice.VeraBuilder(loc, name, type, ip).
 				setPort(port).build();	
+		//getVeraDeviceInfo(v);	
+		
 		return v;	
 	}
 	
