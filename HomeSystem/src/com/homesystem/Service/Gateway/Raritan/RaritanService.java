@@ -56,6 +56,7 @@ public class RaritanService extends Service implements DataRetrieval {
 	
 	// Sampling Interval
 	private int interval = 10;
+	private String channel;
 	
 	private RemoteCallbackList<IRaritanServiceCallback> mRaritanCallbackList = 
 			new RemoteCallbackList<IRaritanServiceCallback>();
@@ -101,7 +102,7 @@ public class RaritanService extends Service implements DataRetrieval {
 		
 		@Override
 		public void setChannel(String channel) throws RemoteException {
-			raritan.setChannel(channel);
+			RaritanService.this.channel = channel;
 		}
 
 		@Override
@@ -165,7 +166,7 @@ public class RaritanService extends Service implements DataRetrieval {
 		setInterruptFlag(false, id[0]);
 		threadPool.execute(new RaritanSNMPManager(raritan.getIp(),
 				raritan.getPort(), id[0], 
-				raritan.getPassword(), raritan.getChannel(),
+				raritan.getPassword(), channel,
 				interval));		 	
 	}
 
