@@ -411,11 +411,13 @@ public class DeviceInfoActivity extends Activity {
 		doUnbindVerisService();
 		doUnbindRaritanService();
 		try {
-			mVeraService.unregisterVeraCallback(mVeraCallback);
-			mVerisService.unregisterVerisCallback(mVerisCallback);
-			mRaritanService.unregisterRaritanCallback(mRaritanCallback);
+			if (mVeraService != null)
+				mVeraService.unregisterVeraCallback(mVeraCallback);
+			if (mVerisService != null)
+				mVerisService.unregisterVerisCallback(mVerisCallback);
+			if (mRaritanService != null)
+				mRaritanService.unregisterRaritanCallback(mRaritanCallback);
 		} catch (RemoteException e) {
-			
 			e.printStackTrace();
 		}
 	}
