@@ -27,6 +27,7 @@ import com.homesystem.Service.Gateway.Vera.VeraSensor.TemperatureSensor;
 import com.homesystem.Service.Gateway.Veris.VerisDevice;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -38,6 +39,8 @@ public class SensorReportService extends Service {
 	
 	private HomeSystem myHomeSystem;
 	private HashMap<String, SensorDevice> sensorByName = null;
+	
+	private String vera_url = null;
 	
 	// Handling Threads
 	private ExecutorService threadPool = Executors.newCachedThreadPool();	
@@ -52,24 +55,142 @@ public class SensorReportService extends Service {
 		@Override
 		public HomeSystem reportHomeSensor() throws RemoteException {
 			
-			VeraDevice vera = new VeraDevice.VeraBuilder("nesl", "vera1", "Vera 2", "172.17.5.117").
-					setPort(3480).build();
-			getVeraDeviceInfo(vera);			
+			InputStream vera_in = null;
+			try {
+				vera_in = getAssets().open("DeviceToRegister/Vera.json");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			VeraDevice vera = registerVeraDevice(vera_in);
+			//getVeraDeviceInfo(vera);			
 			myHomeSystem.addDevicesByName("vera1", vera);
 			
-			VerisDevice veris = new VerisDevice.VerisBuilder("nesl", "veris1", "Veris E30", 
-					"128.97.93.90", 2251).setPort(4660).
-					setRegQty(40).build();
+			InputStream veris_in = null;
+			try {
+				veris_in = getAssets().open("DeviceToRegister/Veris.json");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			VerisDevice veris = registerVerisDevice(veris_in);
 			myHomeSystem.addDevicesByName("veris1", veris);
 			
-			RaritanDevice raritan = new RaritanDevice.RaritanBuilder("nesl backroom", "raritan1", "Raritan Dominion", 
-					"172.17.5.174").setPort(161).setUsername("admin").
-					setPassword("abcd").build();
+			InputStream raritan_in = null;
+			try {
+				raritan_in = getAssets().open("DeviceToRegister/Raritan.json");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			RaritanDevice raritan = registerRaritanDevice(raritan_in);
 			myHomeSystem.addDevicesByName("raritan1", raritan);
 			
 			return myHomeSystem;		
 		}
 	};
+	
+	VeraDevice registerVeraDevice(InputStream in) {
+		String name = null;
+		String loc = null;
+		String type = null;
+		String ip = null;
+		int port = 0;
+		
+		try {
+			int size = in.available();
+			byte[] read_buf = new byte[size];
+	        in.read(read_buf);
+	        in.close();
+	        String vera_string = new String(read_buf);
+			JSONObject vera_json = new JSONObject(vera_string);
+			name = vera_json.getString("name");
+			loc = vera_json.getString("location");
+			type = vera_json.getString("type");
+			ip = vera_json.getString("ip");
+			port = Integer.parseInt(vera_json.getString("port"));	
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		VeraDevice v = new VeraDevice.VeraBuilder(loc, name, type, ip).
+				setPort(port).build();	
+		return v;	
+	}
+	
+	VerisDevice registerVerisDevice(InputStream in) {
+		String name = null;
+		String loc = null;
+		String type = null;
+		String ip = null;
+		int port = 0;
+		int reg_addr = 0;
+		int reg_qty = 0;
+		
+		try {
+			int size = in.available();
+			byte[] read_buf = new byte[size];
+	        in.read(read_buf);
+	        in.close();
+	        String veris_string = new String(read_buf);
+			JSONObject veris_json = new JSONObject(veris_string);
+			name = veris_json.getString("name");
+			loc = veris_json.getString("location");
+			type = veris_json.getString("type");
+			ip = veris_json.getString("ip");
+			port = Integer.parseInt(veris_json.getString("port"));	
+			reg_addr = Integer.parseInt(veris_json.getString("register address"));
+			reg_qty = Integer.parseInt(veris_json.getString("register quantity"));
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		VerisDevice v = new VerisDevice.VerisBuilder(loc, name, type, 
+				ip, reg_addr).setPort(port).setRegQty(reg_qty).build();
+		
+		return v;		
+	}
+	
+	RaritanDevice registerRaritanDevice(InputStream in) {
+		String name = null;
+		String loc = null;
+		String type = null;
+		String ip = null;
+		String username = null;
+		String password = null;
+		int port = 0;
+		
+		try {
+			int size = in.available();
+			byte[] read_buf = new byte[size];
+	        in.read(read_buf);
+	        in.close();
+	        String raritan_string = new String(read_buf);
+			JSONObject raritan_json = new JSONObject(raritan_string);
+			name = raritan_json.getString("name");
+			loc = raritan_json.getString("location");
+			type = raritan_json.getString("type");
+			ip = raritan_json.getString("ip");
+			port = Integer.parseInt(raritan_json.getString("port"));	
+			username = raritan_json.getString("username");
+			password = raritan_json.getString("password");
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}	
+		
+		RaritanDevice r = new RaritanDevice.RaritanBuilder(loc, name, type, ip).
+				setPort(port).setUsername(username).
+				setPassword(password).build();
+		
+		return r;		
+	}
 	
 	@Override 
     public void onCreate() { 

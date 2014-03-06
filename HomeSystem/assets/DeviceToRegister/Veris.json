@@ -1,0 +1,9 @@
+{
+	"name" : "veris1",
+	"location" : "nesl",
+	"type" : "Veris E30",
+	"ip" : "128.97.93.90",
+	"port" : "2251",
+	"register address" : "2251",
+	"register quantity" : "40"
+}

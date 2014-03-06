@@ -1,0 +1,7 @@
+{
+	"name" : "vera1", 
+	"location" : "nesl",
+	"type" : "Vera 2",
+	"ip" : "172.17.5.117",
+	"port" : "3480"
+}

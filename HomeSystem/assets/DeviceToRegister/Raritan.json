@@ -1,0 +1,9 @@
+{
+	"name" : "raritan1",
+	"location" : "nesl backroom",
+	"type" : "Raritan Dominion",
+	"ip" : "172.17.5.117",
+	"port" : "161",
+	"username" : "admin",
+	"password" : "abcd"
+}
