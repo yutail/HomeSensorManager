@@ -42,7 +42,11 @@ public class SensorReportService extends Service {
 	private HomeSystem myHomeSystem;
 	private HashMap<String, SensorDevice> sensorByName = null;
 	
-	private String vera_ip = null;
+	private String vera_url = null;
+	private String vera_ip;
+	// Used for generating URL
+	private String request[] = {"user_data", "status", "sdata"};
+	private String format = "output_format=json";
 	
 	// Handling Threads
 	private ExecutorService threadPool = Executors.newCachedThreadPool();	
@@ -118,6 +122,8 @@ public class SensorReportService extends Service {
 		
 		VeraDevice v = new VeraDevice.VeraBuilder(loc, name, type, ip).
 				setPort(port).build();	
+		
+		vera_url = generateURL(request[2], format, v);
 		getVeraDeviceInfo(v);	
 		
 		return v;	
@@ -219,7 +225,7 @@ public class SensorReportService extends Service {
 			public void run() {
 				try {
 					// HTTP connection
-					URL targetURL = new URL("http://172.17.5.117:3480/data_request?id=sdata&output_format=json");
+					URL targetURL = new URL(vera_url);
 					HttpURLConnection http_connection = (HttpURLConnection) targetURL.openConnection();
 					http_connection.setRequestMethod("GET");
 					http_connection.setDoOutput(false);
@@ -312,6 +318,21 @@ public class SensorReportService extends Service {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String generateURL(String r, String f, VeraDevice vera) {
+		// Format of Requested URL: http://ip_address:3480/data_request?id=sdata&output_format=json
+		StringBuilder result = new StringBuilder();
+		result.append("http://");
+		result.append(vera.getIp());
+		result.append(":");
+		result.append(vera.getPort());
+		result.append("/data_request?");
+		result.append("id=");
+		result.append(r);
+		result.append("&");
+		result.append(f);
+		return result.toString();
 	}
 
 }

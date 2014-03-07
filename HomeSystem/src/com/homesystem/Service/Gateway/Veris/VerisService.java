@@ -241,7 +241,6 @@ public class VerisService extends Service implements DataRetrieval {
 				if (Thread.interrupted()) {
 					return;
 				}
-				
 				try {
 					socket = new Socket(server_addr, server_port);
 					InputStream in = socket.getInputStream();
