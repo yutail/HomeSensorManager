@@ -65,6 +65,24 @@ this.setInterval(_arg0);
 reply.writeNoException();
 return true;
 }
+case TRANSACTION_setRegAddr:
+{
+data.enforceInterface(DESCRIPTOR);
+int _arg0;
+_arg0 = data.readInt();
+this.setRegAddr(_arg0);
+reply.writeNoException();
+return true;
+}
+case TRANSACTION_setRegQty:
+{
+data.enforceInterface(DESCRIPTOR);
+int _arg0;
+_arg0 = data.readInt();
+this.setRegQty(_arg0);
+reply.writeNoException();
+return true;
+}
 case TRANSACTION_registerVerisCallback:
 {
 data.enforceInterface(DESCRIPTOR);
@@ -144,6 +162,36 @@ _reply.recycle();
 _data.recycle();
 }
 }
+@Override public void setRegAddr(int reg_addr) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeInt(reg_addr);
+mRemote.transact(Stub.TRANSACTION_setRegAddr, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
+@Override public void setRegQty(int reg_qty) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeInt(reg_qty);
+mRemote.transact(Stub.TRANSACTION_setRegQty, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
 @Override public void registerVerisCallback(com.homesystem.Service.Gateway.Veris.IVerisServiceCallback veris_cb) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
@@ -178,12 +226,16 @@ _data.recycle();
 static final int TRANSACTION_startDataRetrieval = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
 static final int TRANSACTION_stopDataRetrieval = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
 static final int TRANSACTION_setInterval = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
-static final int TRANSACTION_registerVerisCallback = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
-static final int TRANSACTION_unregisterVerisCallback = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
+static final int TRANSACTION_setRegAddr = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
+static final int TRANSACTION_setRegQty = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
+static final int TRANSACTION_registerVerisCallback = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
+static final int TRANSACTION_unregisterVerisCallback = (android.os.IBinder.FIRST_CALL_TRANSACTION + 6);
 }
 public void startDataRetrieval() throws android.os.RemoteException;
 public void stopDataRetrieval() throws android.os.RemoteException;
 public void setInterval(int i) throws android.os.RemoteException;
+public void setRegAddr(int reg_addr) throws android.os.RemoteException;
+public void setRegQty(int reg_qty) throws android.os.RemoteException;
 public void registerVerisCallback(com.homesystem.Service.Gateway.Veris.IVerisServiceCallback veris_cb) throws android.os.RemoteException;
 public void unregisterVerisCallback(com.homesystem.Service.Gateway.Veris.IVerisServiceCallback veris_cb) throws android.os.RemoteException;
 }

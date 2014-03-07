@@ -216,7 +216,6 @@ public class RaritanService extends Service implements DataRetrieval {
 				if (Thread.interrupted()) {
 					return;
 				}
-				
 				try {
 					start();
 					String result = getAsString(new OID(targetIOD));

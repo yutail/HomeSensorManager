@@ -103,6 +103,16 @@ public class VerisService extends Service implements DataRetrieval {
 			if (veris_cb != null)
 				mVerisCallbackList.unregister(veris_cb);			
 		}
+
+		@Override
+		public void setRegAddr(int reg_addr) throws RemoteException {
+			veris.setRegAddr(reg_addr);			
+		}
+
+		@Override
+		public void setRegQty(int reg_qty) throws RemoteException {
+			veris.setRegQty(reg_qty);			
+		}
 	};
 	
 	// Handler
