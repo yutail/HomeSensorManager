@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -215,7 +216,7 @@ public class VeraService extends Service implements DataRetrieval {
 		return result.toString();
 	}
 	
-	public String retrieveData(JSONObject deviceData, int index, String tag) {
+	public float retrieveData(JSONObject deviceData, int index, String tag) {
 		try {
 			JSONArray devices = deviceData.getJSONArray("devices");
 			int len = devices.length();
@@ -223,14 +224,18 @@ public class VeraService extends Service implements DataRetrieval {
 				JSONObject dev = (JSONObject) devices.get(i);
 				int deviceNum = dev.getInt("id");
 				if (index == deviceNum) {
-					String status = dev.getString(tag);
+					float status = 0;
+					if (tag.equals("temperature") || tag.equals("light"))
+						status = Float.parseFloat(dev.getString(tag));
+					else if (tag.equals("motion"))
+						status = Float.parseFloat(dev.getString("lasttrip"));
 					return status;
 				}				
 			}
-			return null;			
+			return 0;			
 		} catch (JSONException e) {
 			e.printStackTrace();
-			return null;
+			return 0;
 		}		
 	}
 	
@@ -255,19 +260,16 @@ public class VeraService extends Service implements DataRetrieval {
 				mSensor = mTemperatureMap.get(id);
 				tag = "temperature";
 			}
+			else if (mMotionMap.containsKey(id)) {
+				mSensor = mMotionMap.get(id);
+				tag = "motion";
+			}
 		}
 
 		@Override
 		public void run() {
 			while (true) {
 				if (Thread.interrupted()) {
-//					Message msg = mHandler.obtainMessage(Constant.VERA_MESSAGE);
-//			        Bundle bundle = new Bundle();
-//			        bundle.putString(Constant.VERA_VALUE, "");
-//			        bundle.putInt(Constant.VERA_ID, tid);
-//			        bundle.putString(Constant.VERA_SUBTYPE, tag);
-//			        msg.setData(bundle);
-//			        mHandler.sendMessage(msg);
 					return;
 				}
 				try {	
@@ -284,25 +286,38 @@ public class VeraService extends Service implements DataRetrieval {
 					String line = buf.readLine();
 					sb.append(line);
 					JSONObject devInfo = new JSONObject(sb.toString());
-					String result = retrieveData(devInfo, tid, tag);
-					Log.d(TAG, "Received Data: " + tag + ": " + result);
+					float result = retrieveData(devInfo, tid, tag);
+					float lasttrip;
+					String status = String.valueOf(result);
+					if (tag.equals("motion")) {
+						lasttrip = ((MotionSensor) mSensor).getLasttrip();
+						if (result == lasttrip)
+							status = "No Motion";
+						else 
+							status = "Has Motion";
+					}
+					DecimalFormat df = new DecimalFormat("##########");
+					Log.d(TAG, "Received Data: " + tag + ": " + df.format(result));
 					
 					// Sending message to update UI
 			        Message msg = mHandler.obtainMessage(REPORT_MSG);
 			        Bundle bundle = new Bundle();
-			        bundle.putString(VERA_VALUE, result);
+			        bundle.putString(VERA_VALUE, status);
 			        bundle.putString(VERA_SUBTYPE, tag);
 			        bundle.putInt(VERA_ID, tid);
 			        msg.setData(bundle);
 			        mHandler.sendMessage(msg);
 					
 					if(tag.equals("light")) {
-						((LightLevelSensor) mSensor).setLightLevel(Float.parseFloat(result));
+						((LightLevelSensor) mSensor).setLightLevel(result);
 						//setLightSensor(tid, (LightLevelSensor) mSensor);	
 					}
 					else if (tag.equals("temperature")) {
-						((TemperatureSensor) mSensor).setTemperature(Float.parseFloat(result));
+						((TemperatureSensor) mSensor).setTemperature(result);
 						//setTemperatureSensor(tid, (TemperatureSensor) mSensor);
+					}
+					else if (tag.equals("motion")) {
+						((MotionSensor) mSensor).setLasttrip(result);
 					}
 					
 					Thread.sleep(interval*1000);
@@ -325,5 +340,4 @@ public class VeraService extends Service implements DataRetrieval {
 			}
 		}				
 	}	
-	
 }

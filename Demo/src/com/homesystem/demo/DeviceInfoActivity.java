@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.homesystem.Service.Constant;
 import com.homesystem.Service.HomeSystem;
 import com.homesystem.Service.ISensorReportService;
 import com.homesystem.Service.Gateway.SensorDevice;
@@ -235,11 +234,17 @@ public class DeviceInfoActivity extends Activity {
 						int interval =Integer.parseInt(veraIntervalText.getText().toString());
 						try {
 							mVeraService.setInterval(interval);
+							mVeraService.startDataRetrieval(idMotion);
 						} catch (RemoteException e) {
 							e.printStackTrace();
 						}
-						//veraSensorValue3.setText("No Motion");
 					} else {
+						try {
+							mVeraService.stopDataRetrieval(idMotion);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
+						Log.d(TAG, "Motion Service Stopped");
 						veraSensorValue3.setText("");
 					}					
 				}				

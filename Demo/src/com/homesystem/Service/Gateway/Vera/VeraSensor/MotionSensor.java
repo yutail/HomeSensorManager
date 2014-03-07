@@ -11,7 +11,7 @@ public class MotionSensor extends MotherSensor implements Parcelable {
 		this.parent = p;
 	}
 
-	private float value;
+	private float lasttrip;
 	private String unit = "Motion/No Motion";
 	private int parent;
 	
@@ -20,14 +20,14 @@ public class MotionSensor extends MotherSensor implements Parcelable {
 		return this.unit;
 	}
 	
-	public void setValue(float v) {
+	public void setLasttrip(float l) {
 		
-		this.value = v;
+		this.lasttrip = l;
 	}
 	
-	public float getValue() {
+	public float getLasttrip() {
 		
-		return this.value;
+		return this.lasttrip;
 	}	
 	
 	public void setParent(int p) {
@@ -44,7 +44,7 @@ public class MotionSensor extends MotherSensor implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		super.writeToParcel(dest, flags);
 		dest.writeInt(parent);
-		dest.writeFloat(value);
+		dest.writeFloat(lasttrip);
 	}
 	
 	public static final Parcelable.Creator<MotionSensor> CREATOR
@@ -61,7 +61,7 @@ public class MotionSensor extends MotherSensor implements Parcelable {
 	private MotionSensor(Parcel in) {
 		super(in);
 		parent = in.readInt();
-		value = in.readFloat();
+		lasttrip = in.readFloat();
 	}
 	
 }

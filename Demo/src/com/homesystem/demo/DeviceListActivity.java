@@ -3,7 +3,6 @@ package com.homesystem.demo;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.homesystem.Service.Constant;
 import com.homesystem.Service.HomeSystem;
 import com.homesystem.Service.ISensorReportService;
 import com.homesystem.Service.Gateway.SensorDevice;

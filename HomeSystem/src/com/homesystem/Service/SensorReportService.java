@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,6 +32,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 public class SensorReportService extends Service {
@@ -116,7 +118,7 @@ public class SensorReportService extends Service {
 		
 		VeraDevice v = new VeraDevice.VeraBuilder(loc, name, type, ip).
 				setPort(port).build();	
-		//getVeraDeviceInfo(v);	
+		getVeraDeviceInfo(v);	
 		
 		return v;	
 	}
@@ -150,6 +152,7 @@ public class SensorReportService extends Service {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		Log.d(TAG, "Port Num: " + port);
 		
 		VerisDevice v = new VerisDevice.VerisBuilder(loc, name, type, 
 				ip, reg_addr).setPort(port).setRegQty(reg_qty).build();
@@ -240,6 +243,7 @@ public class SensorReportService extends Service {
 						int subcategory = Integer.parseInt(dev.getString("subcategory"));
 						int parent = dev.getInt("parent");
 						int deviceNum = dev.getInt("id");
+						float lasttrip = Float.parseFloat(dev.getString("lasttrip"));
 						Log.d(TAG, "Name: " + name + ", Category: " + category + 
 								", Subcategory: " + subcategory + ", DeviceNum: " + deviceNum);
 
@@ -270,6 +274,9 @@ public class SensorReportService extends Service {
 							
 							MotionSensor mMotion = new MotionSensor(category, subcategory, 
 									deviceNum, "Motion Sensor", parent);
+							mMotion.setLasttrip(lasttrip);
+							DecimalFormat df = new DecimalFormat("##########");
+							Log.d(TAG, "Lasttrip: " + df.format(lasttrip));
 							//vera.setMotionSensor(deviceNum, mMotion);	
 							VeraSensorQueue.mSensorQueue.add(mMotion);
 						}
