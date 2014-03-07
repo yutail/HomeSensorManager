@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.homesystem.Service.HomeSystem;
-import com.homesystem.Service.ISensorReportService;
 import com.homesystem.Service.Gateway.SensorDevice;
 import com.homesystem.Service.Gateway.Raritan.IRaritanService;
 import com.homesystem.Service.Gateway.Raritan.IRaritanServiceCallback;
@@ -387,6 +386,60 @@ public class DeviceInfoActivity extends Activity {
 					}	
 				}	
 			});
+			
+			raritanApparentPowerCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+					int outlet = Integer.parseInt(raritanApparentPowerEdit.getText().toString());
+					if (isChecked) {
+						int interval = Integer.parseInt(raritanIntervalText.getText().toString());
+						try {
+							mRaritanService.setChannel(Constant.RARITAN_APPARENT_POWER);
+							mRaritanService.setInterval(interval);
+							mRaritanService.startDataRetrieval(outlet);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
+					} else {
+						try {
+							mRaritanService.stopDataRetrieval(outlet);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}						
+						raritanApparentPowerValue.setText("");						
+					}					
+				}				
+			});
+			
+			raritanPowerFactorCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+					int outlet = Integer.parseInt(raritanPowerFactorEdit.getText().toString());
+					if (isChecked) {
+						int interval = Integer.parseInt(raritanIntervalText.getText().toString());
+						try {
+							mRaritanService.setChannel(Constant.RARITAN_POWER_FACTOR);
+							mRaritanService.setInterval(interval);
+							mRaritanService.startDataRetrieval(outlet);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
+					} else {
+						try {
+							mRaritanService.stopDataRetrieval(outlet);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
+						raritanPowerFactorValue.setText("");
+					}
+					
+				}
+				
+			});
 		}
 	}
 
@@ -487,11 +540,13 @@ public class DeviceInfoActivity extends Activity {
 		raritanCurrentCheckBox = (CheckBox) findViewById(R.id.check_raritan_current);
 		raritanApparentPowerCheckBox = (CheckBox) findViewById(R.id.check_raritan_apparent_power);
 		raritanPowerFactorCheckBox = (CheckBox) findViewById(R.id.check_raritan_power_factor);
+		
 		raritanVoltageEdit = (EditText) findViewById(R.id.edit_voltage_outlet);
 		raritanActivePowerEdit = (EditText) findViewById(R.id.edit_active_power_outlet);
 		raritanCurrentEdit = (EditText) findViewById(R.id.edit_current_outlet);
 		raritanApparentPowerEdit = (EditText) findViewById(R.id.edit_apparent_power_outlet);
 		raritanPowerFactorEdit = (EditText) findViewById(R.id.edit_power_factor_outlet);
+		
 		raritanVoltageValue = (TextView) findViewById(R.id.raritan_voltage_text);
 		raritanActivePowerValue = (TextView) findViewById(R.id.raritan_active_power_text);
 		raritanCurrentValue = (TextView) findViewById(R.id.raritan_current_text);	
@@ -683,6 +738,10 @@ public class DeviceInfoActivity extends Activity {
 					raritanActivePowerValue.setText(raritan_value);
 				else if (channel.equals(Constant.RARITAN_CURRENT))
 					raritanCurrentValue.setText(raritan_value);
+				else if (channel.equals(Constant.RARITAN_APPARENT_POWER))
+					raritanApparentPowerValue.setText(raritan_value);
+				else if (channel.equals(Constant.RARITAN_POWER_FACTOR))
+					raritanPowerFactorValue.setText(raritan_value);
 			} break;
 			
 			default:

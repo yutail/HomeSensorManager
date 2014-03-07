@@ -2,7 +2,7 @@
 	"name" : "raritan1",
 	"location" : "nesl backroom",
 	"type" : "Raritan Dominion",
-	"ip" : "172.17.5.117",
+	"ip" : "172.17.5.174",
 	"port" : "161",
 	"username" : "admin",
 	"password" : "abcd"
