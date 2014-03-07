@@ -319,7 +319,6 @@ public class VeraService extends Service implements DataRetrieval {
 					else if (tag.equals("motion")) {
 						((MotionSensor) mSensor).setLasttrip(result);
 					}
-					
 					Thread.sleep(interval*1000);
 					
 					if (getInterruptFlag(tid)) {

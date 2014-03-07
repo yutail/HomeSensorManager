@@ -206,6 +206,56 @@
             android:text=""
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <CheckBox
+            android:id="@+id/check_raritan_apparent_power"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Apparent Power" />
+
+        <EditText
+            android:id="@+id/edit_apparent_power_outlet"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:ems="10" />
+
+        <TextView
+            android:id="@+id/raritan_apparent_power_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <CheckBox
+            android:id="@+id/check_raritan_power_factor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Power Factor" />
+
+        <EditText
+            android:id="@+id/edit_power_factor_outlet"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:ems="10" />
+
+        <TextView
+            android:id="@+id/raritan_power_factor_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
 
 
 </LinearLayout>

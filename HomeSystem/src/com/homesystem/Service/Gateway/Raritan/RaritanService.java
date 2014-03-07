@@ -204,6 +204,10 @@ public class RaritanService extends Service implements DataRetrieval {
 				targetIOD = RaritanOID.activePowerOID[client_outlet-1];
 			else if (client_channel.equals(Constant.RARITAN_CURRENT))
 				targetIOD = RaritanOID.currentOID[client_outlet-1];
+			else if (client_channel.equals(Constant.RARITAN_APPARENT_POWER))
+				targetIOD = RaritanOID.apparentPowerOID[client_outlet-1];
+			else if (client_channel.equals(Constant.RARITAN_POWER_FACTOR))
+				targetIOD = RaritanOID.powerFactorIOD[client_outlet-1];
 		}
 
 		@Override

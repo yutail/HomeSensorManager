@@ -75,12 +75,18 @@ public class DeviceInfoActivity extends Activity {
 	private CheckBox raritanVoltageCheckBox;
 	private CheckBox raritanActivePowerCheckBox;
 	private CheckBox raritanCurrentCheckBox;
+	private CheckBox raritanApparentPowerCheckBox;
+	private CheckBox raritanPowerFactorCheckBox;
 	private EditText raritanVoltageEdit;
 	private EditText raritanActivePowerEdit;
 	private EditText raritanCurrentEdit;
+	private EditText raritanApparentPowerEdit;
+	private EditText raritanPowerFactorEdit;
 	private TextView raritanVoltageValue;
 	private TextView raritanActivePowerValue;
 	private TextView raritanCurrentValue;
+	private TextView raritanApparentPowerValue;
+	private TextView raritanPowerFactorValue;
 	
 	// Sensor Info
 	private HomeSystem myHomeSystem = null;
@@ -479,12 +485,18 @@ public class DeviceInfoActivity extends Activity {
 		raritanVoltageCheckBox = (CheckBox) findViewById(R.id.check_raritan_voltage);;
 		raritanActivePowerCheckBox = (CheckBox) findViewById(R.id.check_raritan_active_power);
 		raritanCurrentCheckBox = (CheckBox) findViewById(R.id.check_raritan_current);
+		raritanApparentPowerCheckBox = (CheckBox) findViewById(R.id.check_raritan_apparent_power);
+		raritanPowerFactorCheckBox = (CheckBox) findViewById(R.id.check_raritan_power_factor);
 		raritanVoltageEdit = (EditText) findViewById(R.id.edit_voltage_outlet);
 		raritanActivePowerEdit = (EditText) findViewById(R.id.edit_active_power_outlet);
 		raritanCurrentEdit = (EditText) findViewById(R.id.edit_current_outlet);
+		raritanApparentPowerEdit = (EditText) findViewById(R.id.edit_apparent_power_outlet);
+		raritanPowerFactorEdit = (EditText) findViewById(R.id.edit_power_factor_outlet);
 		raritanVoltageValue = (TextView) findViewById(R.id.raritan_voltage_text);
 		raritanActivePowerValue = (TextView) findViewById(R.id.raritan_active_power_text);
 		raritanCurrentValue = (TextView) findViewById(R.id.raritan_current_text);	
+		raritanApparentPowerValue = (TextView) findViewById(R.id.raritan_apparent_power_text);
+		raritanPowerFactorValue = (TextView) findViewById(R.id.raritan_power_factor_text);
 	}
 
 	// Vera Service Connection
