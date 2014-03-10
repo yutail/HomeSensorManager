@@ -18,8 +18,9 @@ import org.snmp4j.smi.OctetString;
 import org.snmp4j.smi.VariableBinding;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
 
+import com.homesystem.Service.Constant;
 import com.homesystem.Service.HomeSystem;
-import com.homesystem.Demo.Constant;
+
 import com.homesystem.Service.Gateway.DataRetrieval;
 import com.homesystem.Service.Gateway.SensorDevice;
 import com.homesystem.Service.Gateway.Raritan.RaritanDevice;

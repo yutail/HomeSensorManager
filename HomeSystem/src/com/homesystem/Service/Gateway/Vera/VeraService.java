@@ -16,8 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.homesystem.Service.Constant;
 import com.homesystem.Service.HomeSystem;
-import com.homesystem.Demo.Constant;
 import com.homesystem.Service.Gateway.DataRetrieval;
 import com.homesystem.Service.Gateway.SensorDevice;
 import com.homesystem.Service.Gateway.Vera.VeraDevice;

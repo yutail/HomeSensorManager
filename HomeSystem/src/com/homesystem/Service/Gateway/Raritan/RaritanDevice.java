@@ -25,7 +25,6 @@ import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
-import com.homesystem.Demo.Constant;
 import com.homesystem.Service.Gateway.DataRetrieval;
 import com.homesystem.Service.Gateway.SensorDevice;
 

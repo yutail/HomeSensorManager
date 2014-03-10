@@ -1,24 +1,8 @@
 package com.homesystem.Service.Gateway.Veris;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
-
-import com.homesystem.Demo.Constant;
-import com.homesystem.Service.Gateway.DataRetrieval;
 import com.homesystem.Service.Gateway.SensorDevice;
 
 public class VerisDevice extends SensorDevice implements Parcelable {
