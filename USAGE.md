@@ -36,6 +36,7 @@ This interface is used to retrieve data from Raritan devices through Simple Netw
 
 ## Call IPC Methods
 Here are the steps a calling class must implement to call a remote interface defined in AIDL:
+
 1. Declare an instance of the IBinder interface (generated based on the AIDL).
 
 2. Implement ServiceConnection.
