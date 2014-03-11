@@ -51,6 +51,7 @@ Here are the steps a calling class must implement to call a remote interface def
 Code example for using IVeraService interface:
 ```
 	private VeraService mVeraService = null;
+	private VeraConnection mVeraConnection = null;
 	
 	/* Vera Service Connection */
 	private class VeraConnection implements ServiceConnection {
@@ -72,6 +73,15 @@ Code example for using IVeraService interface:
 		}	
 	} 
 	
+	...
+	
+	/* Bind to the remote service */
+	bindService(intent, mVeraConnection, Context.BIND_AUTO_CREATE);
+	
+	...
+	
+	/* Call IPC method after onServiceConnected() returns successfully */
+	mVeraService.startDataRetrieval();
 ```
 
 
