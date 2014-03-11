@@ -35,6 +35,12 @@ This interface is used to retrieve data from Raritan devices through Simple Netw
 *	void unregisterRaritanCallback(IRaritanServiceCallback raritan_cb);
 
 ## Call IPC Methods
-
+Here are the steps a calling class must implement to call a remote interface defined in AIDL:
+1. Declare an instance of the IBinder interface (generated based on the AIDL).
+2. Implement ServiceConnection.
+3. Call Context.bindService(), passing in your ServiceConnection implementation.
+4. In your implementation of onServiceConnected(), you will receive an IBinder instance (called service). Call YourInterfaceName.Stub.asInterface((IBinder)service) to cast the returned parameter to YourInterface type.
+5. Call the methods that you defined on your interface.
+6. To disconnect, call Context.unbindService() with the instance of your interface.
 
 
