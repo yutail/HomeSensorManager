@@ -50,7 +50,9 @@ Here are the steps a calling class must implement to call a remote interface def
 
 Code example for using IVeraService interface:
 ```
-// Vera Service Connection
+	private VeraService mVeraService = null;
+	
+	/* Vera Service Connection */
 	private class VeraConnection implements ServiceConnection {
 		@Override
 		public void onServiceConnected(ComponentName className, IBinder service) {
@@ -69,6 +71,7 @@ Code example for using IVeraService interface:
 			Log.d(TAG, "Remote Vera Serivce Disconnected");
 		}	
 	} 
+	
 ```
 
 
