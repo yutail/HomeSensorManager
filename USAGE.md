@@ -48,4 +48,27 @@ Here are the steps a calling class must implement to call a remote interface def
 
 6. To disconnect, call `Context.unbindService()` with the instance of your interface.
 
+Code example for using IVeraService interface:
+```
+// Vera Service Connection
+	private class VeraConnection implements ServiceConnection {
+		@Override
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			mVeraService = IVeraService.Stub.asInterface(service);
+			try {
+				mVeraService.registerVeraCallback(mVeraCallback);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+			Log.d(TAG, "Remote Vera Service Connected");
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName className) {
+			mVeraService = null;
+			Log.d(TAG, "Remote Vera Serivce Disconnected");
+		}	
+	} 
+```
+
 
