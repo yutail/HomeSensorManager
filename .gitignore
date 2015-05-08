@@ -1,3 +1,8 @@
 # Build file
 demo/build/
 library/build/
+
+# iml file
+*.iml
+
+.idea/

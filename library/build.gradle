@@ -1,0 +1,17 @@
+apply plugin: 'com.android.library'
+
+version = 'com.github.yutail'
+group = '1.0.0'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion 10
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
