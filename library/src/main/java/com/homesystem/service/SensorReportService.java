@@ -1,4 +1,4 @@
-package com.homesystem.Service;
+package com.homesystem.service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,11 +28,9 @@ import com.homesystem.Service.Gateway.Vera.VeraSensor.TemperatureSensor;
 import com.homesystem.Service.Gateway.Veris.VerisDevice;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.text.format.DateFormat;
 import android.util.Log;
 
 public class SensorReportService extends Service {
